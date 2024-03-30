@@ -36,7 +36,7 @@ fn widgets_block_renders() {
     for x in 1..=5 {
         expected.get_mut(x, 0).set_fg(Color::LightBlue);
     }
-    terminal.backend().assert_buffer(&expected);
+    terminal.backend().buffer().assert_eq(&expected);
 }
 
 #[test]
@@ -49,7 +49,7 @@ fn widgets_block_titles_overlap() {
         terminal
             .draw(|frame| frame.render_widget(block, area))
             .unwrap();
-        terminal.backend().assert_buffer(&expected);
+        terminal.backend().buffer().assert_eq(&expected);
     }
 
     // Left overrides the center
@@ -103,7 +103,7 @@ fn widgets_block_renders_on_small_areas() {
         terminal
             .draw(|frame| frame.render_widget(block, area))
             .unwrap();
-        terminal.backend().assert_buffer(&expected);
+        terminal.backend().buffer().assert_eq(&expected);
     }
 
     let one_cell_test_cases = [
@@ -208,7 +208,7 @@ fn widgets_block_title_alignment() {
             terminal
                 .draw(|frame| frame.render_widget(block, area))
                 .unwrap();
-            terminal.backend().assert_buffer(&expected);
+            terminal.backend().buffer().assert_eq(&expected);
         }
     }
 
@@ -395,7 +395,7 @@ fn widgets_block_title_alignment_bottom() {
         terminal
             .draw(|frame| frame.render_widget(block, area))
             .unwrap();
-        terminal.backend().assert_buffer(&expected);
+        terminal.backend().buffer().assert_eq(&expected);
     }
 
     // title bottom-left with all borders
@@ -572,21 +572,17 @@ fn widgets_block_multiple_titles() {
     fn test_case(title_a: Title, title_b: Title, borders: Borders, expected: Buffer) {
         let backend = TestBackend::new(15, 3);
         let mut terminal = Terminal::new(backend).unwrap();
-
         let block = Block::default()
             .title(title_a)
             .title(title_b)
             .borders(borders);
-
         let area = Rect::new(1, 0, 13, 3);
-
         terminal
             .draw(|f| {
                 f.render_widget(block, area);
             })
             .unwrap();
-
-        terminal.backend().assert_buffer(&expected);
+        terminal.backend().buffer().assert_eq(&expected);
     }
 
     // title bottom-left with all borders

@@ -414,29 +414,27 @@ mod test {
     /// This can be used for easy testing of varying configured paragraphs with the same expected
     /// buffer or any other test case really.
     #[allow(clippy::needless_pass_by_value)]
+    #[track_caller]
     fn test_case(paragraph: &Paragraph, expected: Buffer) {
         let backend = TestBackend::new(expected.area.width, expected.area.height);
         let mut terminal = Terminal::new(backend).unwrap();
-
         terminal
             .draw(|f| {
                 let size = f.size();
                 f.render_widget(paragraph.clone(), size);
             })
             .unwrap();
-
-        terminal.backend().assert_buffer(&expected);
+        terminal.backend().buffer().assert_eq(&expected);
     }
 
     #[test]
     fn zero_width_char_at_end_of_line() {
         let line = "foo\0";
-        let paragraphs = vec![
+        let paragraphs = [
             Paragraph::new(line),
             Paragraph::new(line).wrap(Wrap { trim: false }),
             Paragraph::new(line).wrap(Wrap { trim: true }),
         ];
-
         for paragraph in paragraphs {
             test_case(&paragraph, Buffer::with_lines(vec!["foo"]));
             test_case(&paragraph, Buffer::with_lines(vec!["foo   "]));
@@ -447,12 +445,11 @@ mod test {
 
     #[test]
     fn test_render_empty_paragraph() {
-        let paragraphs = vec![
+        let paragraphs = [
             Paragraph::new(""),
             Paragraph::new("").wrap(Wrap { trim: false }),
             Paragraph::new("").wrap(Wrap { trim: true }),
         ];
-
         for paragraph in paragraphs {
             test_case(&paragraph, Buffer::with_lines(vec![" "]));
             test_case(&paragraph, Buffer::with_lines(vec!["          "]));
@@ -464,21 +461,20 @@ mod test {
     #[test]
     fn test_render_single_line_paragraph() {
         let text = "Hello, world!";
-        let truncated_paragraph = Paragraph::new(text);
-        let wrapped_paragraph = Paragraph::new(text).wrap(Wrap { trim: false });
-        let trimmed_paragraph = Paragraph::new(text).wrap(Wrap { trim: true });
-
-        let paragraphs = vec![&truncated_paragraph, &wrapped_paragraph, &trimmed_paragraph];
-
+        let paragraphs = [
+            Paragraph::new(text),
+            Paragraph::new(text).wrap(Wrap { trim: false }),
+            Paragraph::new(text).wrap(Wrap { trim: true }),
+        ];
         for paragraph in paragraphs {
-            test_case(paragraph, Buffer::with_lines(vec!["Hello, world!  "]));
-            test_case(paragraph, Buffer::with_lines(vec!["Hello, world!"]));
+            test_case(&paragraph, Buffer::with_lines(vec!["Hello, world!  "]));
+            test_case(&paragraph, Buffer::with_lines(vec!["Hello, world!"]));
             test_case(
-                paragraph,
+                &paragraph,
                 Buffer::with_lines(vec!["Hello, world!  ", "               "]),
             );
             test_case(
-                paragraph,
+                &paragraph,
                 Buffer::with_lines(vec!["Hello, world!", "             "]),
             );
         }
@@ -487,13 +483,11 @@ mod test {
     #[test]
     fn test_render_multi_line_paragraph() {
         let text = "This is a\nmultiline\nparagraph.";
-
-        let paragraphs = vec![
+        let paragraphs = [
             Paragraph::new(text),
             Paragraph::new(text).wrap(Wrap { trim: false }),
             Paragraph::new(text).wrap(Wrap { trim: true }),
         ];
-
         for paragraph in paragraphs {
             test_case(
                 &paragraph,
@@ -1031,7 +1025,6 @@ mod test {
             "└──────────────────┘",
         ]);
         expected.set_style(Rect::new(1, 1, 11, 1), Style::default().fg(Color::Green));
-
-        assert_eq!(buf, expected);
+        buf.assert_eq(&expected);
     }
 }

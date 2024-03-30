@@ -54,7 +54,7 @@ fn widgets_gauge_renders() {
     expected.set_style(Rect::new(18, 6, 2, 1), Style::new().blue().on_red());
     expected.set_style(Rect::new(20, 6, 17, 1), Style::new().red().on_blue());
 
-    terminal.backend().assert_buffer(&expected);
+    terminal.backend().buffer().assert_eq(&expected);
 }
 
 #[test]
@@ -82,19 +82,21 @@ fn widgets_gauge_renders_no_unicode() {
             f.render_widget(gauge, chunks[1]);
         })
         .unwrap();
-    let expected = Buffer::with_lines(vec![
-        "                                        ",
-        "                                        ",
-        "  ┌Percentage────────────────────────┐  ",
-        "  │███████████████43%                │  ",
-        "  └──────────────────────────────────┘  ",
-        "  ┌Ratio─────────────────────────────┐  ",
-        "  │███████        21%                │  ",
-        "  └──────────────────────────────────┘  ",
-        "                                        ",
-        "                                        ",
-    ]);
-    terminal.backend().assert_buffer(&expected);
+    terminal
+        .backend()
+        .buffer()
+        .assert_eq(&Buffer::with_lines(vec![
+            "                                        ",
+            "                                        ",
+            "  ┌Percentage────────────────────────┐  ",
+            "  │███████████████43%                │  ",
+            "  └──────────────────────────────────┘  ",
+            "  ┌Ratio─────────────────────────────┐  ",
+            "  │███████        21%                │  ",
+            "  └──────────────────────────────────┘  ",
+            "                                        ",
+            "                                        ",
+        ]));
 }
 
 #[test]
@@ -157,7 +159,7 @@ fn widgets_gauge_applies_styles() {
             .bg(Color::Red)
             .add_modifier(Modifier::BOLD),
     );
-    terminal.backend().assert_buffer(&expected);
+    terminal.backend().buffer().assert_eq(&expected);
 }
 
 #[test]
@@ -173,8 +175,10 @@ fn widgets_gauge_supports_large_labels() {
             f.render_widget(gauge, f.size());
         })
         .unwrap();
-    let expected = Buffer::with_lines(vec!["4333333333"]);
-    terminal.backend().assert_buffer(&expected);
+    terminal
+        .backend()
+        .buffer()
+        .assert_eq(&Buffer::with_lines(vec!["4333333333"]));
 }
 
 #[test]
@@ -226,5 +230,5 @@ fn widgets_line_gauge_renders() {
     for col in 5..7 {
         expected.get_mut(col, 2).set_fg(Color::Green);
     }
-    terminal.backend().assert_buffer(&expected);
+    terminal.backend().buffer().assert_eq(&expected);
 }

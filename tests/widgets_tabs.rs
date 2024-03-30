@@ -27,7 +27,7 @@ fn widgets_tabs_should_not_panic_on_narrow_areas() {
         })
         .unwrap();
     let expected = Buffer::with_lines(vec![" "]);
-    terminal.backend().assert_buffer(&expected);
+    terminal.backend().buffer().assert_eq(&expected);
 }
 
 #[test]
@@ -50,5 +50,5 @@ fn widgets_tabs_should_truncate_the_last_item() {
         .unwrap();
     let mut expected = Buffer::with_lines(vec![format!(" Tab1 {} T ", symbols::line::VERTICAL)]);
     expected.set_style(Rect::new(1, 0, 4, 1), Style::new().reversed());
-    terminal.backend().assert_buffer(&expected);
+    terminal.backend().buffer().assert_eq(&expected);
 }

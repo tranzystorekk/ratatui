@@ -643,7 +643,6 @@ mod tests {
     use rstest::{fixture, rstest};
 
     use super::*;
-    use crate::assert_buffer_eq;
 
     #[fixture]
     fn small_buf() -> Buffer {
@@ -893,8 +892,7 @@ mod tests {
         Line::from("Hello world")
             .left_aligned()
             .render(buf.area, &mut buf);
-        let expected = Buffer::with_lines(vec!["Hello"]);
-        assert_buffer_eq!(buf, expected);
+        buf.assert_eq(&Buffer::with_lines(vec!["Hello"]));
     }
 
     #[test]
@@ -903,8 +901,7 @@ mod tests {
         Line::from("Hello world")
             .right_aligned()
             .render(buf.area, &mut buf);
-        let expected = Buffer::with_lines(vec!["world"]);
-        assert_buffer_eq!(buf, expected);
+        buf.assert_eq(&Buffer::with_lines(vec!["world"]));
     }
 
     #[test]
@@ -913,8 +910,7 @@ mod tests {
         Line::from("Hello world")
             .centered()
             .render(buf.area, &mut buf);
-        let expected = Buffer::with_lines(vec!["lo wo"]);
-        assert_buffer_eq!(buf, expected);
+        buf.assert_eq(&Buffer::with_lines(vec!["lo wo"]));
     }
 
     #[test]
@@ -966,7 +962,6 @@ mod tests {
 
     mod widget {
         use super::*;
-        use crate::assert_buffer_eq;
         const BLUE: Style = Style::new().fg(Color::Blue);
         const GREEN: Style = Style::new().fg(Color::Green);
         const ITALIC: Style = Style::new().add_modifier(Modifier::ITALIC);
@@ -988,14 +983,14 @@ mod tests {
             expected.set_style(Rect::new(0, 0, 15, 1), ITALIC);
             expected.set_style(Rect::new(0, 0, 6, 1), BLUE);
             expected.set_style(Rect::new(6, 0, 6, 1), GREEN);
-            assert_buffer_eq!(buf, expected);
+            buf.assert_eq(&expected);
         }
 
         #[rstest]
         fn render_out_of_bounds(hello_world: Line<'static>, mut small_buf: Buffer) {
             let out_of_bounds = Rect::new(20, 20, 10, 1);
             hello_world.render(out_of_bounds, &mut small_buf);
-            assert_buffer_eq!(small_buf, Buffer::empty(small_buf.area));
+            small_buf.assert_eq(&Buffer::empty(small_buf.area));
         }
 
         #[test]
@@ -1006,15 +1001,14 @@ mod tests {
             expected.set_style(Rect::new(0, 0, 15, 1), ITALIC);
             expected.set_style(Rect::new(0, 0, 6, 1), BLUE);
             expected.set_style(Rect::new(6, 0, 6, 1), GREEN);
-            assert_buffer_eq!(buf, expected);
+            buf.assert_eq(&expected);
         }
 
         #[test]
         fn render_truncates() {
             let mut buf = Buffer::empty(Rect::new(0, 0, 10, 1));
             Line::from("Hello world!").render(Rect::new(0, 0, 5, 1), &mut buf);
-            let expected = Buffer::with_lines(vec!["Hello     "]);
-            assert_buffer_eq!(buf, expected);
+            buf.assert_eq(&Buffer::with_lines(vec!["Hello     "]));
         }
 
         #[test]
@@ -1026,7 +1020,7 @@ mod tests {
             expected.set_style(Rect::new(0, 0, 15, 1), ITALIC);
             expected.set_style(Rect::new(1, 0, 6, 1), BLUE);
             expected.set_style(Rect::new(7, 0, 6, 1), GREEN);
-            assert_buffer_eq!(buf, expected);
+            buf.assert_eq(&expected);
         }
 
         #[test]
@@ -1038,7 +1032,7 @@ mod tests {
             expected.set_style(Rect::new(0, 0, 15, 1), ITALIC);
             expected.set_style(Rect::new(3, 0, 6, 1), BLUE);
             expected.set_style(Rect::new(9, 0, 6, 1), GREEN);
-            assert_buffer_eq!(buf, expected);
+            buf.assert_eq(&expected);
         }
     }
 

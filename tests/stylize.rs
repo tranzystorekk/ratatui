@@ -55,8 +55,7 @@ fn barchart_can_be_stylized() {
         expected.get_mut(x * 3, 4).set_fg(Color::Blue);
         expected.get_mut(x * 3 + 1, 4).set_fg(Color::Reset);
     }
-
-    terminal.backend().assert_buffer(&expected);
+    terminal.backend().buffer().assert_eq(&expected);
 }
 
 #[test]
@@ -90,8 +89,7 @@ fn block_can_be_stylized() -> io::Result<()> {
     for x in 1..=5 {
         expected.get_mut(x, 0).set_fg(Color::LightBlue);
     }
-
-    terminal.backend().assert_buffer(&expected);
+    terminal.backend().buffer().assert_eq(&expected);
     Ok(())
 }
 
@@ -109,6 +107,6 @@ fn paragraph_can_be_stylized() -> io::Result<()> {
     for x in 0..4 {
         expected.get_mut(x, 0).set_fg(Color::Cyan);
     }
-    terminal.backend().assert_buffer(&expected);
+    terminal.backend().buffer().assert_eq(&expected);
     Ok(())
 }

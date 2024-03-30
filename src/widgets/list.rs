@@ -1049,7 +1049,7 @@ mod tests {
     use rstest::{fixture, rstest};
 
     use super::*;
-    use crate::{assert_buffer_eq, widgets::Borders};
+    use crate::widgets::Borders;
 
     #[test]
     fn test_list_state_selected() {
@@ -1221,11 +1221,11 @@ mod tests {
 
         // attempt to render into an area of the buffer with 0 width
         Widget::render(list.clone(), Rect::new(0, 0, 0, 3), &mut buffer);
-        assert_buffer_eq!(buffer, Buffer::empty(buffer.area));
+        buffer.assert_eq(&Buffer::empty(buffer.area));
 
         // attempt to render into an area of the buffer with 0 height
         Widget::render(list.clone(), Rect::new(0, 0, 15, 0), &mut buffer);
-        assert_buffer_eq!(buffer, Buffer::empty(buffer.area));
+        buffer.assert_eq(&Buffer::empty(buffer.area));
 
         let list = List::new(items)
             .highlight_symbol(">>")
@@ -1233,14 +1233,11 @@ mod tests {
         // attempt to render into an area of the buffer with zero height after
         // setting the block borders
         Widget::render(list, Rect::new(0, 0, 15, 2), &mut buffer);
-        assert_buffer_eq!(
-            buffer,
-            Buffer::with_lines(vec![
-                "┌─────────────┐",
-                "└─────────────┘",
-                "               "
-            ])
-        );
+        buffer.assert_eq(&Buffer::with_lines(vec![
+            "┌─────────────┐",
+            "└─────────────┘",
+            "               ",
+        ]));
     }
 
     #[allow(clippy::too_many_lines)]
@@ -1249,11 +1246,8 @@ mod tests {
         fn test_case_render(items: &[ListItem], expected_lines: Vec<&str>) {
             let list = List::new(items.to_owned()).highlight_symbol(">>");
             let mut buffer = Buffer::empty(Rect::new(0, 0, 10, 5));
-
             Widget::render(list, buffer.area, &mut buffer);
-
-            let expected = Buffer::with_lines(expected_lines);
-            assert_buffer_eq!(buffer, expected);
+            buffer.assert_eq(&Buffer::with_lines(expected_lines));
         }
         fn test_case_render_stateful(
             items: &[ListItem],
@@ -1263,11 +1257,8 @@ mod tests {
             let list = List::new(items.to_owned()).highlight_symbol(">>");
             let mut state = ListState::default().with_selected(selected);
             let mut buffer = Buffer::empty(Rect::new(0, 0, 10, 5));
-
             StatefulWidget::render(list, buffer.area, &mut buffer, &mut state);
-
-            let expected = Buffer::with_lines(expected_lines);
-            assert_buffer_eq!(buffer, expected);
+            buffer.assert_eq(&Buffer::with_lines(expected_lines));
         }
 
         let empty_items: Vec<ListItem> = Vec::new();
@@ -1459,16 +1450,14 @@ mod tests {
     #[test]
     fn test_list_items_setter() {
         let list = List::default().items(["Item 0", "Item 1", "Item 2"]);
-        assert_buffer_eq!(
-            render_widget(list, 10, 5),
-            Buffer::with_lines(vec![
-                "Item 0    ",
-                "Item 1    ",
-                "Item 2    ",
-                "          ",
-                "          ",
-            ])
-        );
+        let buffer = render_widget(list, 10, 5);
+        buffer.assert_eq(&Buffer::with_lines(vec![
+            "Item 0    ",
+            "Item 1    ",
+            "Item 2    ",
+            "          ",
+            "          ",
+        ]));
     }
 
     #[test]
@@ -1476,8 +1465,7 @@ mod tests {
         let items = list_items(vec!["Item 0", "", "", "Item 1", "Item 2"]);
         let list = List::new(items).block(Block::default().title("List").borders(Borders::ALL));
         let buffer = render_widget(list, 10, 7);
-
-        let expected = Buffer::with_lines(vec![
+        buffer.assert_eq(&Buffer::with_lines(vec![
             "┌List────┐",
             "│Item 0  │",
             "│        │",
@@ -1485,8 +1473,7 @@ mod tests {
             "│Item 1  │",
             "│Item 2  │",
             "└────────┘",
-        ]);
-        assert_buffer_eq!(buffer, expected);
+        ]));
     }
 
     #[test]
@@ -1501,8 +1488,7 @@ mod tests {
         let items = list_items(vec!["Item 0", "Item 1", "Item 2"]);
         let list = List::new(items).block(Block::default().title("List").borders(Borders::ALL));
         let buffer = render_widget(list, 10, 7);
-
-        let expected = Buffer::with_lines(vec![
+        buffer.assert_eq(&Buffer::with_lines(vec![
             "┌List────┐",
             "│Item 0  │",
             "│Item 1  │",
@@ -1510,25 +1496,21 @@ mod tests {
             "│        │",
             "│        │",
             "└────────┘",
-        ]);
-        assert_buffer_eq!(buffer, expected);
+        ]));
     }
 
     #[test]
     fn test_list_style() {
         let items = list_items(vec!["Item 0", "Item 1", "Item 2"]);
         let list = List::new(items).style(Style::default().fg(Color::Red));
-
-        assert_buffer_eq!(
-            render_widget(list, 10, 5),
-            Buffer::with_lines(vec![
-                "Item 0    ".red(),
-                "Item 1    ".red(),
-                "Item 2    ".red(),
-                "          ".red(),
-                "          ".red(),
-            ])
-        );
+        let buffer = render_widget(list, 10, 5);
+        buffer.assert_eq(&Buffer::with_lines(vec![
+            "Item 0    ".red(),
+            "Item 1    ".red(),
+            "Item 2    ".red(),
+            "          ".red(),
+            "          ".red(),
+        ]));
     }
 
     #[test]
@@ -1539,17 +1521,14 @@ mod tests {
             .highlight_style(Style::default().fg(Color::Yellow));
         let mut state = ListState::default();
         state.select(Some(1));
-
-        assert_buffer_eq!(
-            render_stateful_widget(list, &mut state, 10, 5),
-            Buffer::with_lines(vec![
-                "  Item 0  ".into(),
-                ">>Item 1  ".yellow(),
-                "  Item 2  ".into(),
-                "          ".into(),
-                "          ".into(),
-            ])
-        );
+        let buffer = render_stateful_widget(list, &mut state, 10, 5);
+        buffer.assert_eq(&Buffer::with_lines(vec![
+            "  Item 0  ".into(),
+            ">>Item 1  ".yellow(),
+            "  Item 2  ".into(),
+            "          ".into(),
+            "          ".into(),
+        ]));
     }
 
     #[test]
@@ -1559,17 +1538,14 @@ mod tests {
             let items = list_items(vec!["Item 0", "Item 1", "Item 2"]);
             let list = List::new(items).highlight_symbol(">>");
             let mut state = ListState::default();
-
             let buffer = render_stateful_widget(list, &mut state, 10, 5);
-
-            let expected = Buffer::with_lines(vec![
+            buffer.assert_eq(&Buffer::with_lines(vec![
                 "Item 0    ",
                 "Item 1    ",
                 "Item 2    ",
                 "          ",
                 "          ",
-            ]);
-            assert_buffer_eq!(buffer, expected);
+            ]));
         }
 
         // when selected
@@ -1578,17 +1554,14 @@ mod tests {
             let list = List::new(items).highlight_symbol(">>");
             let mut state = ListState::default();
             state.select(Some(1));
-
             let buffer = render_stateful_widget(list, &mut state, 10, 5);
-
-            let expected = Buffer::with_lines(vec![
+            buffer.assert_eq(&Buffer::with_lines(vec![
                 "  Item 0  ",
                 ">>Item 1  ",
                 "  Item 2  ",
                 "          ",
                 "          ",
-            ]);
-            assert_buffer_eq!(buffer, expected);
+            ]));
         }
     }
 
@@ -1601,17 +1574,14 @@ mod tests {
                 .highlight_symbol(">>")
                 .highlight_spacing(HighlightSpacing::Always);
             let mut state = ListState::default();
-
             let buffer = render_stateful_widget(list, &mut state, 10, 5);
-
-            let expected = Buffer::with_lines(vec![
+            buffer.assert_eq(&Buffer::with_lines(vec![
                 "  Item 0  ",
                 "  Item 1  ",
                 "  Item 2  ",
                 "          ",
                 "          ",
-            ]);
-            assert_buffer_eq!(buffer, expected);
+            ]));
         }
 
         // when selected
@@ -1622,17 +1592,14 @@ mod tests {
                 .highlight_spacing(HighlightSpacing::Always);
             let mut state = ListState::default();
             state.select(Some(1));
-
             let buffer = render_stateful_widget(list, &mut state, 10, 5);
-
-            let expected = Buffer::with_lines(vec![
+            buffer.assert_eq(&Buffer::with_lines(vec![
                 "  Item 0  ",
                 ">>Item 1  ",
                 "  Item 2  ",
                 "          ",
                 "          ",
-            ]);
-            assert_buffer_eq!(buffer, expected);
+            ]));
         }
     }
 
@@ -1645,17 +1612,14 @@ mod tests {
                 .highlight_symbol(">>")
                 .highlight_spacing(HighlightSpacing::Never);
             let mut state = ListState::default();
-
             let buffer = render_stateful_widget(list, &mut state, 10, 5);
-
-            let expected = Buffer::with_lines(vec![
+            buffer.assert_eq(&Buffer::with_lines(vec![
                 "Item 0    ",
                 "Item 1    ",
                 "Item 2    ",
                 "          ",
                 "          ",
-            ]);
-            assert_buffer_eq!(buffer, expected);
+            ]));
         }
 
         // when selected
@@ -1666,17 +1630,14 @@ mod tests {
                 .highlight_spacing(HighlightSpacing::Never);
             let mut state = ListState::default();
             state.select(Some(1));
-
             let buffer = render_stateful_widget(list, &mut state, 10, 5);
-
-            let expected = Buffer::with_lines(vec![
+            buffer.assert_eq(&Buffer::with_lines(vec![
                 "Item 0    ",
                 "Item 1    ",
                 "Item 2    ",
                 "          ",
                 "          ",
-            ]);
-            assert_buffer_eq!(buffer, expected);
+            ]));
         }
     }
 
@@ -1689,17 +1650,14 @@ mod tests {
             .repeat_highlight_symbol(true);
         let mut state = ListState::default();
         state.select(Some(0));
-
-        assert_buffer_eq!(
-            render_stateful_widget(list, &mut state, 10, 5),
-            Buffer::with_lines(vec![
-                ">>Item 0  ".yellow(),
-                ">>Line 2  ".yellow(),
-                "  Item 1  ".into(),
-                "  Item 2  ".into(),
-                "          ".into(),
-            ])
-        );
+        let buffer = render_stateful_widget(list, &mut state, 10, 5);
+        buffer.assert_eq(&Buffer::with_lines(vec![
+            ">>Item 0  ".yellow(),
+            ">>Line 2  ".yellow(),
+            "  Item 1  ".into(),
+            "  Item 2  ".into(),
+            "          ".into(),
+        ]));
     }
 
     #[test]
@@ -1707,14 +1665,13 @@ mod tests {
         let items = list_items(vec!["Item 0", "Item 1", "Item 2"]);
         let list = List::new(items).direction(ListDirection::TopToBottom);
         let buffer = render_widget(list, 10, 5);
-        let expected = Buffer::with_lines(vec![
+        buffer.assert_eq(&Buffer::with_lines(vec![
             "Item 0    ",
             "Item 1    ",
             "Item 2    ",
             "          ",
             "          ",
-        ]);
-        assert_buffer_eq!(buffer, expected);
+        ]));
     }
 
     #[test]
@@ -1722,14 +1679,13 @@ mod tests {
         let items = list_items(vec!["Item 0", "Item 1", "Item 2"]);
         let list = List::new(items).direction(ListDirection::BottomToTop);
         let buffer = render_widget(list, 10, 5);
-        let expected = Buffer::with_lines(vec![
+        buffer.assert_eq(&Buffer::with_lines(vec![
             "          ",
             "          ",
             "Item 2    ",
             "Item 1    ",
             "Item 0    ",
-        ]);
-        assert_buffer_eq!(buffer, expected);
+        ]));
     }
 
     #[test]
@@ -1738,14 +1694,13 @@ mod tests {
         #[allow(deprecated)] // For start_corner
         let list = List::new(items).start_corner(Corner::TopLeft);
         let buffer = render_widget(list, 10, 5);
-        let expected = Buffer::with_lines(vec![
+        buffer.assert_eq(&Buffer::with_lines(vec![
             "Item 0    ",
             "Item 1    ",
             "Item 2    ",
             "          ",
             "          ",
-        ]);
-        assert_buffer_eq!(buffer, expected);
+        ]));
     }
 
     #[test]
@@ -1754,14 +1709,13 @@ mod tests {
         #[allow(deprecated)] // For start_corner
         let list = List::new(items).start_corner(Corner::BottomLeft);
         let buffer = render_widget(list, 10, 5);
-        let expected = Buffer::with_lines(vec![
+        buffer.assert_eq(&Buffer::with_lines(vec![
             "          ",
             "          ",
             "Item 2    ",
             "Item 1    ",
             "Item 0    ",
-        ]);
-        assert_buffer_eq!(buffer, expected);
+        ]));
     }
 
     #[test]
@@ -1769,8 +1723,11 @@ mod tests {
         let items = list_items(vec!["Item 0", "Item 1", "Item 2", "Item 3", "Item 4"]);
         let list = List::new(items);
         let buffer = render_widget(list, 10, 3);
-        let expected = Buffer::with_lines(vec!["Item 0    ", "Item 1    ", "Item 2    "]);
-        assert_buffer_eq!(buffer, expected);
+        buffer.assert_eq(&Buffer::with_lines(vec![
+            "Item 0    ",
+            "Item 1    ",
+            "Item 2    ",
+        ]));
     }
 
     #[test]
@@ -1782,8 +1739,7 @@ mod tests {
         let mut state = ListState::default().with_offset(3);
         let buffer = render_stateful_widget(list, &mut state, 6, 3);
 
-        let expected = Buffer::with_lines(vec!["Item 3", "Item 4", "Item 5"]);
-        assert_buffer_eq!(buffer, expected);
+        buffer.assert_eq(&Buffer::with_lines(vec!["Item 3", "Item 4", "Item 5"]));
     }
 
     #[test]
@@ -1792,8 +1748,7 @@ mod tests {
             let mut state = ListState::default();
             state.select(selected);
             let buffer = render_stateful_widget(list, &mut state, 15, 3);
-            let expected = Buffer::with_lines(expected_lines);
-            assert_buffer_eq!(buffer, expected);
+            buffer.assert_eq(&Buffer::with_lines(expected_lines));
         }
 
         let items = list_items(vec![
@@ -1826,8 +1781,11 @@ mod tests {
         let mut state = ListState::default().with_selected(Some(1)).with_offset(3);
         let buffer = render_stateful_widget(list, &mut state, 10, 3);
 
-        let expected = Buffer::with_lines(vec![">>Item 1  ", "  Item 2  ", "  Item 3  "]);
-        assert_buffer_eq!(buffer, expected);
+        buffer.assert_eq(&Buffer::with_lines(vec![
+            ">>Item 1  ",
+            "  Item 2  ",
+            "  Item 3  ",
+        ]));
         assert_eq!(state.selected, Some(1));
         assert_eq!(
             state.offset, 1,
@@ -1846,8 +1804,11 @@ mod tests {
         let mut state = ListState::default().with_selected(Some(6)).with_offset(3);
         let buffer = render_stateful_widget(list, &mut state, 10, 3);
 
-        let expected = Buffer::with_lines(vec!["  Item 4  ", "  Item 5  ", ">>Item 6  "]);
-        assert_buffer_eq!(buffer, expected);
+        buffer.assert_eq(&Buffer::with_lines(vec![
+            "  Item 4  ",
+            "  Item 5  ",
+            ">>Item 6  ",
+        ]));
         assert_eq!(state.selected, Some(6));
         assert_eq!(
             state.offset, 4,
@@ -1896,14 +1857,13 @@ mod tests {
         .collect::<Vec<ListItem>>();
         let list = List::new(items);
         let buffer = render_widget(list, 10, 5);
-        let expected = Buffer::with_lines(vec![
+        buffer.assert_eq(&Buffer::with_lines(vec![
             "Left      ",
             "  Center  ",
             "     Right",
             "          ",
             "          ",
-        ]);
-        assert_buffer_eq!(buffer, expected);
+        ]));
     }
 
     #[test]
@@ -1918,9 +1878,9 @@ mod tests {
         .collect::<Vec<ListItem>>();
         let list = List::new(items);
         let buffer = render_widget(list, 7, 5);
-        let expected =
-            Buffer::with_lines(vec!["Odd    ", " Even  ", "  Width", "       ", "       "]);
-        assert_buffer_eq!(buffer, expected);
+        buffer.assert_eq(&Buffer::with_lines(vec![
+            "Odd    ", " Even  ", "  Width", "       ", "       ",
+        ]));
     }
 
     #[test]
@@ -1935,8 +1895,9 @@ mod tests {
         .collect::<Vec<ListItem>>();
         let list = List::new(items);
         let buffer = render_widget(list, 6, 4);
-        let expected = Buffer::with_lines(vec!["Odd   ", " Even ", " Width", "      "]);
-        assert_buffer_eq!(buffer, expected);
+        buffer.assert_eq(&Buffer::with_lines(vec![
+            "Odd   ", " Even ", " Width", "      ",
+        ]));
     }
 
     #[test]
@@ -1951,8 +1912,9 @@ mod tests {
         .collect::<Vec<ListItem>>();
         let list = List::new(items);
         let buffer = render_widget(list, 8, 4);
-        let expected = Buffer::with_lines(vec!["Odd     ", "  Even  ", "   Width", "        "]);
-        assert_buffer_eq!(buffer, expected);
+        buffer.assert_eq(&Buffer::with_lines(vec![
+            "Odd     ", "  Even  ", "   Width", "        ",
+        ]));
     }
 
     #[test]
@@ -1967,8 +1929,9 @@ mod tests {
         .collect::<Vec<ListItem>>();
         let list = List::new(items);
         let buffer = render_widget(list, 6, 5);
-        let expected = Buffer::with_lines(vec!["Odd   ", " Even ", " Width", "     ", "     "]);
-        assert_buffer_eq!(buffer, expected);
+        buffer.assert_eq(&Buffer::with_lines(vec![
+            "Odd   ", " Even ", " Width", "     ", "     ",
+        ]));
     }
 
     #[test]
@@ -1979,8 +1942,7 @@ mod tests {
             .collect::<Vec<ListItem>>();
         let list = List::new(items);
         let buffer = render_widget(list, 0, 5);
-        let expected = Buffer::with_lines(vec!["", "", "", "", ""]);
-        assert_buffer_eq!(buffer, expected);
+        buffer.assert_eq(&Buffer::with_lines(vec!["", "", "", "", ""]));
     }
 
     #[test]
@@ -1990,12 +1952,9 @@ mod tests {
             .map(ListItem::new)
             .collect::<Vec<ListItem>>();
         let list = List::new(items);
-        // assert_buffer_eq! doesn't handle zero height buffers so we call this test manually
-        // rather than using render_widget
         let mut buffer = Buffer::empty(Rect::new(0, 0, 4, 1));
         Widget::render(list, Rect::new(0, 0, 4, 0), &mut buffer);
-        let expected = Buffer::with_lines(vec!["    "]);
-        assert_buffer_eq!(buffer, expected);
+        buffer.assert_eq(&Buffer::with_lines(vec!["    "]));
     }
 
     #[test]
@@ -2003,14 +1962,13 @@ mod tests {
         let items = [Line::from("Small").alignment(Alignment::Center)];
         let list = List::new(items);
         let buffer = render_widget(list, 10, 5);
-        let expected = Buffer::with_lines(vec![
+        buffer.assert_eq(&Buffer::with_lines(vec![
             "  Small   ",
             "          ",
             "          ",
             "          ",
             "          ",
-        ]);
-        assert_buffer_eq!(buffer, expected);
+        ]));
     }
 
     #[test]
@@ -2021,8 +1979,7 @@ mod tests {
             .collect::<Vec<ListItem>>();
         let list = List::new(items);
         let buffer = render_widget(list, 5, 3);
-        let expected = Buffer::with_lines(vec!["Exact", "     ", "     "]);
-        assert_buffer_eq!(buffer, expected);
+        buffer.assert_eq(&Buffer::with_lines(vec!["Exact", "     ", "     "]));
     }
 
     #[test]
@@ -2033,8 +1990,7 @@ mod tests {
             .collect::<Vec<ListItem>>();
         let list = List::new(items);
         let buffer = render_widget(list, 5, 3);
-        let expected = Buffer::with_lines(vec!["Large", "     ", "     "]);
-        assert_buffer_eq!(buffer, expected);
+        buffer.assert_eq(&Buffer::with_lines(vec!["Large", "     ", "     "]));
     }
 
     #[rstest]
@@ -2116,15 +2072,13 @@ mod tests {
         let list = List::new(items)
             .scroll_padding(padding)
             .highlight_symbol(">> ");
-
         terminal
             .draw(|f| {
                 let size = f.size();
                 f.render_stateful_widget(list, size, &mut state);
             })
             .unwrap();
-
-        terminal.backend().assert_buffer(&expected);
+        terminal.backend().buffer().assert_eq(&expected);
     }
 
     /// If there isn't enough room for the selected item and the requested padding the list can jump
@@ -2194,11 +2148,14 @@ mod tests {
             })
             .unwrap();
 
-        terminal.backend().assert_buffer(&Buffer::with_lines(vec![
-            "   Item 1 ",
-            "   Item 2 ",
-            ">> Item 3 ",
-        ]));
+        terminal
+            .backend()
+            .buffer()
+            .assert_eq(&Buffer::with_lines(vec![
+                "   Item 1 ",
+                "   Item 2 ",
+                ">> Item 3 ",
+            ]));
     }
 
     // Tests to make sure when it's pushing back the first visible index value that it doesnt
@@ -2227,12 +2184,15 @@ mod tests {
             })
             .unwrap();
 
-        terminal.backend().assert_buffer(&Buffer::with_lines(vec![
-            "   Item 1 ",
-            ">> Item 2 ",
-            "   Item 3 ",
-            "          ",
-        ]));
+        terminal
+            .backend()
+            .buffer()
+            .assert_eq(&Buffer::with_lines(vec![
+                "   Item 1 ",
+                ">> Item 2 ",
+                "   Item 3 ",
+                "          ",
+            ]));
     }
 
     #[fixture]
@@ -2258,6 +2218,6 @@ mod tests {
         let mut state = ListState::default();
         state.select(Some(0));
         StatefulWidget::render(list, single_line_buf.area, &mut single_line_buf, &mut state);
-        assert_buffer_eq!(single_line_buf, Buffer::with_lines(vec![expected]));
+        single_line_buf.assert_eq(&Buffer::with_lines(vec![expected]));
     }
 }

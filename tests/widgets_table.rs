@@ -12,10 +12,11 @@ use ratatui::{
 
 #[test]
 fn widgets_table_column_spacing_can_be_changed() {
-    let test_case = |column_spacing, expected| {
+    #[allow(clippy::needless_pass_by_value)]
+    #[track_caller]
+    fn test_case(column_spacing: u16, expected: Buffer) {
         let backend = TestBackend::new(30, 10);
         let mut terminal = Terminal::new(backend).unwrap();
-
         terminal
             .draw(|f| {
                 let size = f.size();
@@ -38,8 +39,8 @@ fn widgets_table_column_spacing_can_be_changed() {
                 f.render_widget(table, size);
             })
             .unwrap();
-        terminal.backend().assert_buffer(&expected);
-    };
+        terminal.backend().buffer().assert_eq(&expected);
+    }
 
     // no space between columns
     test_case(
@@ -112,10 +113,11 @@ fn widgets_table_column_spacing_can_be_changed() {
 
 #[test]
 fn widgets_table_columns_widths_can_use_fixed_length_constraints() {
-    let test_case = |widths, expected| {
+    #[allow(clippy::needless_pass_by_value)]
+    #[track_caller]
+    fn test_case(widths: &[Constraint], expected: Buffer) {
         let backend = TestBackend::new(30, 10);
         let mut terminal = Terminal::new(backend).unwrap();
-
         terminal
             .draw(|f| {
                 let size = f.size();
@@ -133,8 +135,8 @@ fn widgets_table_columns_widths_can_use_fixed_length_constraints() {
                 f.render_widget(table, size);
             })
             .unwrap();
-        terminal.backend().assert_buffer(&expected);
-    };
+        terminal.backend().buffer().assert_eq(&expected);
+    }
 
     // columns of zero width show nothing
     test_case(
@@ -207,7 +209,6 @@ fn widgets_table_columns_widths_can_use_percentage_constraints() {
     fn test_case(widths: &[Constraint], expected: Buffer) {
         let backend = TestBackend::new(30, 10);
         let mut terminal = Terminal::new(backend).unwrap();
-
         terminal
             .draw(|f| {
                 let size = f.size();
@@ -226,7 +227,7 @@ fn widgets_table_columns_widths_can_use_percentage_constraints() {
                 f.render_widget(table, size);
             })
             .unwrap();
-        terminal.backend().assert_buffer(&expected);
+        terminal.backend().buffer().assert_eq(&expected);
     }
 
     // columns of zero width show nothing
@@ -317,7 +318,6 @@ fn widgets_table_columns_widths_can_use_mixed_constraints() {
     fn test_case(widths: &[Constraint], expected: Buffer) {
         let backend = TestBackend::new(30, 10);
         let mut terminal = Terminal::new(backend).unwrap();
-
         terminal
             .draw(|f| {
                 let size = f.size();
@@ -335,7 +335,7 @@ fn widgets_table_columns_widths_can_use_mixed_constraints() {
                 f.render_widget(table, size);
             })
             .unwrap();
-        terminal.backend().assert_buffer(&expected);
+        terminal.backend().buffer().assert_eq(&expected);
     }
 
     // columns of zero width show nothing
@@ -430,7 +430,6 @@ fn widgets_table_columns_widths_can_use_ratio_constraints() {
     fn test_case(widths: &[Constraint], expected: Buffer) {
         let backend = TestBackend::new(30, 10);
         let mut terminal = Terminal::new(backend).unwrap();
-
         terminal
             .draw(|f| {
                 let size = f.size();
@@ -449,7 +448,7 @@ fn widgets_table_columns_widths_can_use_ratio_constraints() {
                 f.render_widget(table, size);
             })
             .unwrap();
-        terminal.backend().assert_buffer(&expected);
+        terminal.backend().buffer().assert_eq(&expected);
     }
 
     // columns of zero width show nothing
@@ -535,7 +534,9 @@ fn widgets_table_columns_widths_can_use_ratio_constraints() {
 
 #[test]
 fn widgets_table_can_have_rows_with_multi_lines() {
-    let test_case = |state: &mut TableState, expected: Buffer| {
+    #[allow(clippy::needless_pass_by_value)]
+    #[track_caller]
+    fn test_case(state: &mut TableState, expected: Buffer) {
         let backend = TestBackend::new(30, 8);
         let mut terminal = Terminal::new(backend).unwrap();
         terminal
@@ -561,8 +562,8 @@ fn widgets_table_can_have_rows_with_multi_lines() {
                 f.render_stateful_widget(table, size, state);
             })
             .unwrap();
-        terminal.backend().assert_buffer(&expected);
-    };
+        terminal.backend().buffer().assert_eq(&expected);
+    }
 
     let mut state = TableState::default();
     // no selection
@@ -632,7 +633,9 @@ fn widgets_table_can_have_rows_with_multi_lines() {
 #[allow(clippy::too_many_lines)]
 #[test]
 fn widgets_table_enable_always_highlight_spacing() {
-    let test_case = |state: &mut TableState, space: HighlightSpacing, expected: Buffer| {
+    #[allow(clippy::needless_pass_by_value)]
+    #[track_caller]
+    fn test_case(state: &mut TableState, space: HighlightSpacing, expected: Buffer) {
         let backend = TestBackend::new(30, 8);
         let mut terminal = Terminal::new(backend).unwrap();
         terminal
@@ -659,8 +662,8 @@ fn widgets_table_enable_always_highlight_spacing() {
                 f.render_stateful_widget(table, size, state);
             })
             .unwrap();
-        terminal.backend().assert_buffer(&expected);
-    };
+        terminal.backend().buffer().assert_eq(&expected);
+    }
 
     assert_eq!(HighlightSpacing::default(), HighlightSpacing::WhenSelected);
 
@@ -842,7 +845,7 @@ fn widgets_table_can_have_elements_styled_individually() {
             .get_mut(col, 3)
             .set_style(Style::default().fg(Color::Blue));
     }
-    terminal.backend().assert_buffer(&expected);
+    terminal.backend().buffer().assert_eq(&expected);
 }
 
 #[test]
@@ -866,33 +869,22 @@ fn widgets_table_should_render_even_if_empty() {
             f.render_widget(table, size);
         })
         .unwrap();
-
-    let expected = Buffer::with_lines(vec![
-        "│Head1  Head2  Head3         │",
-        "│                            │",
-        "│                            │",
-        "│                            │",
-    ]);
-
-    terminal.backend().assert_buffer(&expected);
+    terminal
+        .backend()
+        .buffer()
+        .assert_eq(&Buffer::with_lines(vec![
+            "│Head1  Head2  Head3         │",
+            "│                            │",
+            "│                            │",
+            "│                            │",
+        ]));
 }
 
+// based on https://github.com/fdehau/tui-rs/issues/470#issuecomment-852562848
 #[test]
 fn widgets_table_columns_dont_panic() {
-    let test_case = |state: &mut TableState, table: Table, width: u16| {
-        let backend = TestBackend::new(width, 8);
-        let mut terminal = Terminal::new(backend).unwrap();
-        terminal
-            .draw(|f| {
-                let size = f.size();
-                f.render_stateful_widget(table, size, state);
-            })
-            .unwrap();
-    };
-
-    // based on https://github.com/fdehau/tui-rs/issues/470#issuecomment-852562848
-    let table1_width = 98;
-    let table1 = Table::new(
+    let table_width = 98;
+    let table = Table::new(
         vec![Row::new(vec!["r1", "r2", "r3", "r4"])],
         [
             Constraint::Percentage(15),
@@ -910,7 +902,15 @@ fn widgets_table_columns_dont_panic() {
 
     // select first, which would cause a panic before fix
     state.select(Some(0));
-    test_case(&mut state, table1.clone(), table1_width);
+
+    let backend = TestBackend::new(table_width, 8);
+    let mut terminal = Terminal::new(backend).unwrap();
+    terminal
+        .draw(|f| {
+            let size = f.size();
+            f.render_stateful_widget(table, size, &mut state);
+        })
+        .unwrap();
 }
 
 #[test]
@@ -945,17 +945,19 @@ fn widgets_table_should_clamp_offset_if_rows_are_removed() {
             f.render_stateful_widget(table, size, &mut state);
         })
         .unwrap();
-    let expected = Buffer::with_lines(vec![
-        "┌────────────────────────────┐",
-        "│Head1 Head2 Head3           │",
-        "│                            │",
-        "│Row21 Row22 Row23           │",
-        "│Row31 Row32 Row33           │",
-        "│Row41 Row42 Row43           │",
-        "│Row51 Row52 Row53           │",
-        "└────────────────────────────┘",
-    ]);
-    terminal.backend().assert_buffer(&expected);
+    terminal
+        .backend()
+        .buffer()
+        .assert_eq(&Buffer::with_lines(vec![
+            "┌────────────────────────────┐",
+            "│Head1 Head2 Head3           │",
+            "│                            │",
+            "│Row21 Row22 Row23           │",
+            "│Row31 Row32 Row33           │",
+            "│Row41 Row42 Row43           │",
+            "│Row51 Row52 Row53           │",
+            "└────────────────────────────┘",
+        ]));
 
     // render with 1 item => offset will be at 1
     state.select(Some(1));
@@ -976,15 +978,17 @@ fn widgets_table_should_clamp_offset_if_rows_are_removed() {
             f.render_stateful_widget(table, size, &mut state);
         })
         .unwrap();
-    let expected = Buffer::with_lines(vec![
-        "┌────────────────────────────┐",
-        "│Head1 Head2 Head3           │",
-        "│                            │",
-        "│Row31 Row32 Row33           │",
-        "│                            │",
-        "│                            │",
-        "│                            │",
-        "└────────────────────────────┘",
-    ]);
-    terminal.backend().assert_buffer(&expected);
+    terminal
+        .backend()
+        .buffer()
+        .assert_eq(&Buffer::with_lines(vec![
+            "┌────────────────────────────┐",
+            "│Head1 Head2 Head3           │",
+            "│                            │",
+            "│Row31 Row32 Row33           │",
+            "│                            │",
+            "│                            │",
+            "│                            │",
+            "└────────────────────────────┘",
+        ]));
 }

@@ -962,65 +962,48 @@ mod tests {
 
     mod widget {
         use super::*;
-        use crate::assert_buffer_eq;
 
         #[test]
         fn render() {
             let text = Text::from("foo");
-
             let area = Rect::new(0, 0, 5, 1);
             let mut buf = Buffer::empty(area);
             text.render(area, &mut buf);
-
-            let expected_buf = Buffer::with_lines(vec!["foo  "]);
-
-            assert_buffer_eq!(buf, expected_buf);
+            buf.assert_eq(&Buffer::with_lines(vec!["foo  "]));
         }
 
         #[rstest]
         fn render_out_of_bounds(mut small_buf: Buffer) {
             let out_of_bounds_area = Rect::new(20, 20, 10, 1);
             Text::from("Hello, world!").render(out_of_bounds_area, &mut small_buf);
-            assert_eq!(small_buf, Buffer::empty(small_buf.area));
+            small_buf.assert_eq(&Buffer::empty(small_buf.area));
         }
 
         #[test]
         fn render_right_aligned() {
             let text = Text::from("foo").alignment(Alignment::Right);
-
             let area = Rect::new(0, 0, 5, 1);
             let mut buf = Buffer::empty(area);
             text.render(area, &mut buf);
-
-            let expected_buf = Buffer::with_lines(vec!["  foo"]);
-
-            assert_buffer_eq!(buf, expected_buf);
+            buf.assert_eq(&Buffer::with_lines(vec!["  foo"]));
         }
 
         #[test]
         fn render_centered_odd() {
             let text = Text::from("foo").alignment(Alignment::Center);
-
             let area = Rect::new(0, 0, 5, 1);
             let mut buf = Buffer::empty(area);
             text.render(area, &mut buf);
-
-            let expected_buf = Buffer::with_lines(vec![" foo "]);
-
-            assert_buffer_eq!(buf, expected_buf);
+            buf.assert_eq(&Buffer::with_lines(vec![" foo "]));
         }
 
         #[test]
         fn render_centered_even() {
             let text = Text::from("foo").alignment(Alignment::Center);
-
             let area = Rect::new(0, 0, 6, 1);
             let mut buf = Buffer::empty(area);
             text.render(area, &mut buf);
-
-            let expected_buf = Buffer::with_lines(vec![" foo  "]);
-
-            assert_buffer_eq!(buf, expected_buf);
+            buf.assert_eq(&Buffer::with_lines(vec![" foo  "]));
         }
 
         #[test]
@@ -1030,14 +1013,10 @@ mod tests {
                 Line::from("bar").alignment(Alignment::Center),
             ])
             .alignment(Alignment::Right);
-
             let area = Rect::new(0, 0, 5, 2);
             let mut buf = Buffer::empty(area);
             text.render(area, &mut buf);
-
-            let expected_buf = Buffer::with_lines(vec!["  foo", " bar "]);
-
-            assert_buffer_eq!(buf, expected_buf);
+            buf.assert_eq(&Buffer::with_lines(vec!["  foo", " bar "]));
         }
 
         #[test]
@@ -1048,8 +1027,7 @@ mod tests {
 
             let mut expected = Buffer::with_lines(vec!["foo  "]);
             expected.set_style(Rect::new(0, 0, 3, 1), Style::new().bg(Color::Blue));
-
-            assert_buffer_eq!(buf, expected);
+            buf.assert_eq(&expected);
         }
 
         #[test]
@@ -1059,8 +1037,7 @@ mod tests {
 
             let mut expected = Buffer::with_lines(vec!["foo   "]);
             expected.set_style(Rect::new(0, 0, 3, 1), Style::new().bg(Color::Blue));
-
-            assert_buffer_eq!(buf, expected);
+            buf.assert_eq(&expected);
         }
     }
 

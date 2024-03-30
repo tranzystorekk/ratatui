@@ -869,7 +869,6 @@ mod tests {
     use strum::ParseError;
 
     use super::*;
-    use crate::assert_buffer_eq;
 
     #[test]
     fn create_with_all_borders() {
@@ -1215,14 +1214,11 @@ mod tests {
             .title(Title::from("E").position(Bottom).alignment(Center))
             .title(Title::from("F").position(Bottom).alignment(Right))
             .render(buffer.area, &mut buffer);
-        assert_buffer_eq!(
-            buffer,
-            Buffer::with_lines(vec![
-                "┌A─────B─────C┐",
-                "│             │",
-                "└D─────E─────F┘",
-            ])
-        );
+        buffer.assert_eq(&Buffer::with_lines(vec![
+            "┌A─────B─────C┐",
+            "│             │",
+            "└D─────E─────F┘",
+        ]));
     }
 
     #[test]
@@ -1236,14 +1232,11 @@ mod tests {
             .title_bottom(Line::raw("E").centered())
             .title_bottom(Line::raw("F").right_aligned())
             .render(buffer.area, &mut buffer);
-        assert_buffer_eq!(
-            buffer,
-            Buffer::with_lines(vec![
-                "┌A─────B─────C┐",
-                "│             │",
-                "└D─────E─────F┘",
-            ])
-        );
+        buffer.assert_eq(&Buffer::with_lines(vec![
+            "┌A─────B─────C┐",
+            "│             │",
+            "└D─────E─────F┘",
+        ]));
     }
 
     #[test]
@@ -1259,7 +1252,7 @@ mod tests {
                 .title("test")
                 .title_alignment(alignment)
                 .render(buffer.area, &mut buffer);
-            assert_buffer_eq!(buffer, Buffer::with_lines(vec![expected]));
+            buffer.assert_eq(&Buffer::with_lines(vec![expected]));
         }
     }
 
@@ -1276,7 +1269,7 @@ mod tests {
                 .title(Title::from("test").alignment(alignment))
                 .title_alignment(block_title_alignment)
                 .render(buffer.area, &mut buffer);
-            assert_buffer_eq!(buffer, Buffer::with_lines(vec![expected]));
+            buffer.assert_eq(&Buffer::with_lines(vec![expected]));
         }
     }
 
@@ -1288,14 +1281,11 @@ mod tests {
             .title("")
             .title_alignment(Alignment::Right)
             .render(buffer.area, &mut buffer);
-        assert_buffer_eq!(
-            buffer,
-            Buffer::with_lines(vec![
-                "               ",
-                "               ",
-                "               ",
-            ])
-        );
+        buffer.assert_eq(&Buffer::with_lines(vec![
+            "               ",
+            "               ",
+            "               ",
+        ]));
     }
 
     #[test]
@@ -1305,7 +1295,7 @@ mod tests {
             .title("test")
             .title_position(Position::Bottom)
             .render(buffer.area, &mut buffer);
-        assert_buffer_eq!(buffer, Buffer::with_lines(vec!["    ", "test"]));
+        buffer.assert_eq(&Buffer::with_lines(vec!["    ", "test"]));
     }
 
     #[test]
@@ -1319,8 +1309,7 @@ mod tests {
 
             let mut expected_buffer = Buffer::with_lines(vec!["test"]);
             expected_buffer.set_style(Rect::new(0, 0, 4, 1), Style::new().yellow());
-
-            assert_buffer_eq!(buffer, expected_buffer);
+            buffer.assert_eq(&expected_buffer);
         }
     }
 
@@ -1336,8 +1325,7 @@ mod tests {
 
             let mut expected_buffer = Buffer::with_lines(vec!["test"]);
             expected_buffer.set_style(Rect::new(0, 0, 4, 1), Style::new().yellow());
-
-            assert_buffer_eq!(buffer, expected_buffer);
+            buffer.assert_eq(&expected_buffer);
         }
     }
 
@@ -1353,8 +1341,7 @@ mod tests {
 
             let mut expected_buffer = Buffer::with_lines(vec!["test"]);
             expected_buffer.set_style(Rect::new(0, 0, 4, 1), Style::new().yellow().on_red());
-
-            assert_buffer_eq!(buffer, expected_buffer);
+            buffer.assert_eq(&expected_buffer);
         }
     }
 
@@ -1374,8 +1361,7 @@ mod tests {
         ]);
         expected_buffer.set_style(Rect::new(0, 0, 15, 3), Style::new().yellow());
         expected_buffer.set_style(Rect::new(1, 1, 13, 1), Style::reset());
-
-        assert_buffer_eq!(buffer, expected_buffer);
+        buffer.assert_eq(&expected_buffer);
     }
 
     #[test]
@@ -1402,14 +1388,11 @@ mod tests {
             .borders(Borders::ALL)
             .border_type(BorderType::Plain)
             .render(buffer.area, &mut buffer);
-        assert_buffer_eq!(
-            buffer,
-            Buffer::with_lines(vec![
-                "┌─────────────┐",
-                "│             │",
-                "└─────────────┘"
-            ])
-        );
+        buffer.assert_eq(&Buffer::with_lines(vec![
+            "┌─────────────┐",
+            "│             │",
+            "└─────────────┘",
+        ]));
     }
 
     #[test]
@@ -1419,14 +1402,11 @@ mod tests {
             .borders(Borders::ALL)
             .border_type(BorderType::Rounded)
             .render(buffer.area, &mut buffer);
-        assert_buffer_eq!(
-            buffer,
-            Buffer::with_lines(vec![
-                "╭─────────────╮",
-                "│             │",
-                "╰─────────────╯"
-            ])
-        );
+        buffer.assert_eq(&Buffer::with_lines(vec![
+            "╭─────────────╮",
+            "│             │",
+            "╰─────────────╯",
+        ]));
     }
 
     #[test]
@@ -1436,14 +1416,11 @@ mod tests {
             .borders(Borders::ALL)
             .border_type(BorderType::Double)
             .render(buffer.area, &mut buffer);
-        assert_buffer_eq!(
-            buffer,
-            Buffer::with_lines(vec![
-                "╔═════════════╗",
-                "║             ║",
-                "╚═════════════╝"
-            ])
-        );
+        buffer.assert_eq(&Buffer::with_lines(vec![
+            "╔═════════════╗",
+            "║             ║",
+            "╚═════════════╝",
+        ]));
     }
 
     #[test]
@@ -1453,14 +1430,11 @@ mod tests {
             .borders(Borders::ALL)
             .border_type(BorderType::QuadrantInside)
             .render(buffer.area, &mut buffer);
-        assert_buffer_eq!(
-            buffer,
-            Buffer::with_lines(vec![
-                "▗▄▄▄▄▄▄▄▄▄▄▄▄▄▖",
-                "▐             ▌",
-                "▝▀▀▀▀▀▀▀▀▀▀▀▀▀▘",
-            ])
-        );
+        buffer.assert_eq(&Buffer::with_lines(vec![
+            "▗▄▄▄▄▄▄▄▄▄▄▄▄▄▖",
+            "▐             ▌",
+            "▝▀▀▀▀▀▀▀▀▀▀▀▀▀▘",
+        ]));
     }
 
     #[test]
@@ -1470,14 +1444,11 @@ mod tests {
             .borders(Borders::ALL)
             .border_type(BorderType::QuadrantOutside)
             .render(buffer.area, &mut buffer);
-        assert_buffer_eq!(
-            buffer,
-            Buffer::with_lines(vec![
-                "▛▀▀▀▀▀▀▀▀▀▀▀▀▀▜",
-                "▌             ▐",
-                "▙▄▄▄▄▄▄▄▄▄▄▄▄▄▟",
-            ])
-        );
+        buffer.assert_eq(&Buffer::with_lines(vec![
+            "▛▀▀▀▀▀▀▀▀▀▀▀▀▀▜",
+            "▌             ▐",
+            "▙▄▄▄▄▄▄▄▄▄▄▄▄▄▟",
+        ]));
     }
 
     #[test]
@@ -1487,14 +1458,11 @@ mod tests {
             .borders(Borders::ALL)
             .border_type(BorderType::Thick)
             .render(buffer.area, &mut buffer);
-        assert_buffer_eq!(
-            buffer,
-            Buffer::with_lines(vec![
-                "┏━━━━━━━━━━━━━┓",
-                "┃             ┃",
-                "┗━━━━━━━━━━━━━┛"
-            ])
-        );
+        buffer.assert_eq(&Buffer::with_lines(vec![
+            "┏━━━━━━━━━━━━━┓",
+            "┃             ┃",
+            "┗━━━━━━━━━━━━━┛",
+        ]));
     }
 
     #[test]
@@ -1513,13 +1481,10 @@ mod tests {
                 horizontal_bottom: "B",
             })
             .render(buffer.area, &mut buffer);
-        assert_buffer_eq!(
-            buffer,
-            Buffer::with_lines(vec![
-                "1TTTTTTTTTTTTT2",
-                "L             R",
-                "3BBBBBBBBBBBBB4",
-            ])
-        );
+        buffer.assert_eq(&Buffer::with_lines(vec![
+            "1TTTTTTTTTTTTT2",
+            "L             R",
+            "3BBBBBBBBBBBBB4",
+        ]));
     }
 }

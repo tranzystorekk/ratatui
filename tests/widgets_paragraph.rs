@@ -10,18 +10,17 @@ use ratatui::{
 /// Tests the [`Paragraph`] widget against the expected [`Buffer`] by rendering it onto an equal
 /// area and comparing the rendered and expected content.
 #[allow(clippy::needless_pass_by_value)]
+#[track_caller]
 fn test_case(paragraph: Paragraph, expected: Buffer) {
     let backend = TestBackend::new(expected.area.width, expected.area.height);
     let mut terminal = Terminal::new(backend).unwrap();
-
     terminal
         .draw(|f| {
             let size = f.size();
             f.render_widget(paragraph, size);
         })
         .unwrap();
-
-    terminal.backend().assert_buffer(&expected);
+    terminal.backend().buffer().assert_eq(&expected);
 }
 
 #[test]
@@ -66,18 +65,19 @@ fn widgets_paragraph_renders_mixed_width_graphemes() {
             f.render_widget(paragraph, size);
         })
         .unwrap();
-
-    let expected = Buffer::with_lines(vec![
-        // The internal width is 8 so only 4 slots for double-width characters.
-        "┌────────┐",
-        "│aコンピ │", // Here we have 1 latin character so only 3 double-width ones can fit.
-        "│ュータ上│",
-        "│で文字を│",
-        "│扱う場合│",
-        "│、      │",
-        "└────────┘",
-    ]);
-    terminal.backend().assert_buffer(&expected);
+    terminal
+        .backend()
+        .buffer()
+        .assert_eq(&Buffer::with_lines(vec![
+            // The internal width is 8 so only 4 slots for double-width characters.
+            "┌────────┐",
+            "│aコンピ │", // Here we have 1 latin character so only 3 double-width ones can fit.
+            "│ュータ上│",
+            "│で文字を│",
+            "│扱う場合│",
+            "│、      │",
+            "└────────┘",
+        ]));
 }
 
 #[test]

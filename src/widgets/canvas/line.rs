@@ -113,7 +113,7 @@ fn draw_line_high(painter: &mut Painter, x1: usize, y1: usize, x2: usize, y2: us
 #[cfg(test)]
 mod tests {
     use super::Line;
-    use crate::{assert_buffer_eq, prelude::*, widgets::canvas::Canvas};
+    use crate::{prelude::*, widgets::canvas::Canvas};
 
     #[allow(clippy::needless_pass_by_value)]
     #[track_caller]
@@ -134,7 +134,7 @@ mod tests {
                 cell.set_style(Style::new().red());
             }
         }
-        assert_buffer_eq!(buffer, expected);
+        buffer.assert_eq(&expected);
     }
 
     #[test]

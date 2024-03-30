@@ -49,7 +49,7 @@ fn widgets_list_should_highlight_the_selected_item() {
     for x in 0..10 {
         expected.get_mut(x, 1).set_bg(Color::Yellow);
     }
-    terminal.backend().assert_buffer(&expected);
+    terminal.backend().buffer().assert_eq(&expected);
 }
 
 #[test]
@@ -81,7 +81,7 @@ fn widgets_list_should_highlight_the_selected_item_wide_symbol() {
     for x in 0..10 {
         expected.get_mut(x, 1).set_bg(Color::Yellow);
     }
-    terminal.backend().assert_buffer(&expected);
+    terminal.backend().buffer().assert_eq(&expected);
 }
 
 #[test]
@@ -95,7 +95,7 @@ fn widgets_list_should_truncate_items() {
     let backend = TestBackend::new(10, 2);
     let mut terminal = Terminal::new(backend).unwrap();
 
-    let cases = vec![
+    let cases = [
         // An item is selected
         TruncateTestCase {
             selected: Some(0),
@@ -132,7 +132,7 @@ fn widgets_list_should_truncate_items() {
                 f.render_stateful_widget(list, Rect::new(0, 0, 8, 2), &mut state);
             })
             .unwrap();
-        terminal.backend().assert_buffer(&case.expected);
+        terminal.backend().buffer().assert_eq(&case.expected);
     }
 }
 
@@ -159,8 +159,15 @@ fn widgets_list_should_clamp_offset_if_items_are_removed() {
             f.render_stateful_widget(list, size, &mut state);
         })
         .unwrap();
-    let expected = Buffer::with_lines(vec!["   Item 2 ", "   Item 3 ", "   Item 4 ", ">> Item 5 "]);
-    terminal.backend().assert_buffer(&expected);
+    terminal
+        .backend()
+        .buffer()
+        .assert_eq(&Buffer::with_lines(vec![
+            "   Item 2 ",
+            "   Item 3 ",
+            "   Item 4 ",
+            ">> Item 5 ",
+        ]));
 
     // render again with 1 items => check offset is clamped to 1
     state.select(Some(1));
@@ -172,8 +179,15 @@ fn widgets_list_should_clamp_offset_if_items_are_removed() {
             f.render_stateful_widget(list, size, &mut state);
         })
         .unwrap();
-    let expected = Buffer::with_lines(vec!["   Item 3 ", "          ", "          ", "          "]);
-    terminal.backend().assert_buffer(&expected);
+    terminal
+        .backend()
+        .buffer()
+        .assert_eq(&Buffer::with_lines(vec![
+            "   Item 3 ",
+            "          ",
+            "          ",
+            "          ",
+        ]));
 }
 
 #[test]
@@ -208,7 +222,7 @@ fn widgets_list_should_display_multiline_items() {
         expected.get_mut(x, 2).set_bg(Color::Yellow);
         expected.get_mut(x, 3).set_bg(Color::Yellow);
     }
-    terminal.backend().assert_buffer(&expected);
+    terminal.backend().buffer().assert_eq(&expected);
 }
 
 #[test]
@@ -244,14 +258,13 @@ fn widgets_list_should_repeat_highlight_symbol() {
         expected.get_mut(x, 2).set_bg(Color::Yellow);
         expected.get_mut(x, 3).set_bg(Color::Yellow);
     }
-    terminal.backend().assert_buffer(&expected);
+    terminal.backend().buffer().assert_eq(&expected);
 }
 
 #[test]
 fn widget_list_should_not_ignore_empty_string_items() {
     let backend = TestBackend::new(6, 4);
     let mut terminal = Terminal::new(backend).unwrap();
-
     terminal
         .draw(|f| {
             let items = vec![
@@ -268,16 +281,18 @@ fn widget_list_should_not_ignore_empty_string_items() {
             f.render_widget(list, f.size());
         })
         .unwrap();
-
-    let expected = Buffer::with_lines(vec!["Item 1", "", "", "Item 4"]);
-
-    terminal.backend().assert_buffer(&expected);
+    terminal
+        .backend()
+        .buffer()
+        .assert_eq(&Buffer::with_lines(vec!["Item 1", "", "", "Item 4"]));
 }
 
 #[allow(clippy::too_many_lines)]
 #[test]
 fn widgets_list_enable_always_highlight_spacing() {
-    let test_case = |state: &mut ListState, space: HighlightSpacing, expected: Buffer| {
+    #[allow(clippy::needless_pass_by_value)]
+    #[track_caller]
+    fn test_case(state: &mut ListState, space: HighlightSpacing, expected: Buffer) {
         let backend = TestBackend::new(30, 8);
         let mut terminal = Terminal::new(backend).unwrap();
         terminal
@@ -294,8 +309,8 @@ fn widgets_list_enable_always_highlight_spacing() {
                 f.render_stateful_widget(table, size, state);
             })
             .unwrap();
-        terminal.backend().assert_buffer(&expected);
-    };
+        terminal.backend().buffer().assert_eq(&expected);
+    }
 
     assert_eq!(HighlightSpacing::default(), HighlightSpacing::WhenSelected);
 

@@ -14,9 +14,9 @@ fn create_labels<'a>(labels: &'a [&'a str]) -> Vec<Span<'a>> {
     labels.iter().map(|l| Span::from(*l)).collect()
 }
 
-fn axis_test_case<'a, S>(width: u16, height: u16, x_axis: Axis, y_axis: Axis, lines: Vec<S>)
+fn axis_test_case<'l, L>(width: u16, height: u16, x_axis: Axis, y_axis: Axis, lines: Vec<L>)
 where
-    S: Into<text::Line<'a>>,
+    L: Into<text::Line<'l>>,
 {
     let backend = TestBackend::new(width, height);
     let mut terminal = Terminal::new(backend).unwrap();
@@ -26,8 +26,10 @@ where
             f.render_widget(chart, f.size());
         })
         .unwrap();
-    let expected = Buffer::with_lines(lines);
-    terminal.backend().assert_buffer(&expected);
+    terminal
+        .backend()
+        .buffer()
+        .assert_eq(&Buffer::with_lines(lines));
 }
 
 #[rstest]
@@ -62,23 +64,30 @@ fn widgets_chart_can_render_on_small_areas(#[case] width: u16, #[case] height: u
         .unwrap();
 }
 
+#[allow(clippy::too_many_lines)]
 #[test]
 fn widgets_chart_handles_long_labels() {
-    let test_case = |x_labels, y_labels, x_alignment, lines| {
+    #[track_caller]
+    fn test_case<'l, L>(
+        x_labels: Option<(&str, &str)>,
+        y_labels: Option<(&str, &str)>,
+        x_alignment: Alignment,
+        lines: Vec<L>,
+    ) where
+        L: Into<text::Line<'l>>,
+    {
         let mut x_axis = Axis::default().bounds([0.0, 1.0]);
         if let Some((left_label, right_label)) = x_labels {
             x_axis = x_axis
                 .labels(vec![Span::from(left_label), Span::from(right_label)])
                 .labels_alignment(x_alignment);
         }
-
         let mut y_axis = Axis::default().bounds([0.0, 1.0]);
         if let Some((left_label, right_label)) = y_labels {
             y_axis = y_axis.labels(vec![Span::from(left_label), Span::from(right_label)]);
         }
-
         axis_test_case(10, 5, x_axis, y_axis, lines);
-    };
+    }
 
     test_case(
         Some(("AAAA", "B")),
@@ -168,15 +177,17 @@ fn widgets_chart_handles_long_labels() {
 
 #[test]
 fn widgets_chart_handles_x_axis_labels_alignments() {
-    let test_case = |y_alignment, lines| {
+    #[track_caller]
+    fn test_case<'l, L>(y_alignment: Alignment, lines: Vec<L>)
+    where
+        L: Into<text::Line<'l>>,
+    {
         let x_axis = Axis::default()
             .labels(vec![Span::from("AAAA"), Span::from("B"), Span::from("C")])
             .labels_alignment(y_alignment);
-
         let y_axis = Axis::default();
-
         axis_test_case(10, 5, x_axis, y_axis, lines);
-    };
+    }
 
     test_case(
         Alignment::Left,
@@ -212,15 +223,18 @@ fn widgets_chart_handles_x_axis_labels_alignments() {
 
 #[test]
 fn widgets_chart_handles_y_axis_labels_alignments() {
-    let test_case = |y_alignment, lines| {
+    #[track_caller]
+    fn test_case<'l, L>(y_alignment: Alignment, lines: Vec<L>)
+    where
+        L: Into<text::Line<'l>>,
+    {
         let x_axis = Axis::default().labels(create_labels(&["AAAAA", "B"]));
-
         let y_axis = Axis::default()
             .labels(create_labels(&["C", "D"]))
             .labels_alignment(y_alignment);
-
         axis_test_case(20, 5, x_axis, y_axis, lines);
-    };
+    }
+
     test_case(
         Alignment::Left,
         vec![
@@ -615,8 +629,7 @@ fn widgets_chart_can_have_a_legend() {
     for (col, row) in x_axis_title {
         expected.get_mut(col, row).set_fg(Color::Yellow);
     }
-
-    terminal.backend().assert_buffer(&expected);
+    terminal.backend().buffer().assert_eq(&expected);
 }
 
 #[test]
@@ -654,5 +667,5 @@ fn widgets_chart_top_line_styling_is_correct() {
     ]);
     expected.set_style(Rect::new(2, 0, 3, 1), title_style);
     expected.set_style(Rect::new(5, 0, 4, 1), data_style);
-    terminal.backend().assert_buffer(&expected);
+    terminal.backend().buffer().assert_eq(&expected);
 }

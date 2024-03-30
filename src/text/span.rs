@@ -565,7 +565,6 @@ mod tests {
         use rstest::rstest;
 
         use super::*;
-        use crate::assert_buffer_eq;
 
         #[test]
         fn render() {
@@ -573,19 +572,17 @@ mod tests {
             let span = Span::styled("test content", style);
             let mut buf = Buffer::empty(Rect::new(0, 0, 15, 1));
             span.render(buf.area, &mut buf);
-
-            let expected = Buffer::with_lines(vec![Line::from(vec![
+            buf.assert_eq(&Buffer::with_lines(vec![Line::from(vec![
                 "test content".green().on_yellow(),
                 "   ".into(),
-            ])]);
-            assert_buffer_eq!(buf, expected);
+            ])]));
         }
 
         #[rstest]
         fn render_out_of_bounds(mut small_buf: Buffer) {
             let out_of_bounds = Rect::new(20, 20, 10, 1);
             Span::raw("Hello, World!").render(out_of_bounds, &mut small_buf);
-            assert_eq!(small_buf, Buffer::empty(small_buf.area));
+            small_buf.assert_eq(&Buffer::empty(small_buf.area));
         }
 
         /// When the content of the span is longer than the area passed to render, the content
@@ -600,8 +597,7 @@ mod tests {
 
             let mut expected = Buffer::with_lines(vec![Line::from("test      ")]);
             expected.set_style(Rect::new(0, 0, 5, 1), (Color::Green, Color::Yellow));
-
-            assert_buffer_eq!(buf, expected);
+            buf.assert_eq(&expected);
         }
 
         /// When there is already a style set on the buffer, the style of the span should be
@@ -613,12 +609,10 @@ mod tests {
             let mut buf = Buffer::empty(Rect::new(0, 0, 15, 1));
             buf.set_style(buf.area, Style::new().italic());
             span.render(buf.area, &mut buf);
-
-            let expected = Buffer::with_lines(vec![Line::from(vec![
+            buf.assert_eq(&Buffer::with_lines(vec![Line::from(vec![
                 "test content".green().on_yellow().italic(),
                 "   ".italic(),
-            ])]);
-            assert_buffer_eq!(buf, expected);
+            ])]));
         }
 
         /// When the span contains a multi-width grapheme, the grapheme will ensure that the cells
@@ -629,12 +623,11 @@ mod tests {
             let span = Span::styled("test 😃 content", style);
             let mut buf = Buffer::empty(Rect::new(0, 0, 15, 1));
             span.render(buf.area, &mut buf);
-
             // The existing code in buffer.set_line() handles multi-width graphemes by clearing the
             // cells of the hidden characters. This test ensures that the existing behavior is
             // preserved.
             let expected = Buffer::with_lines(vec!["test 😃 content".green().on_yellow()]);
-            assert_buffer_eq!(buf, expected);
+            buf.assert_eq(&expected);
         }
 
         /// When the span contains a multi-width grapheme that does not fit in the area passed to
@@ -647,11 +640,10 @@ mod tests {
             let mut buf = Buffer::empty(Rect::new(0, 0, 6, 1));
             span.render(buf.area, &mut buf);
 
-            let expected = Buffer::with_lines(vec![Line::from(vec![
+            buf.assert_eq(&Buffer::with_lines(vec![Line::from(vec![
                 "test ".green().on_yellow(),
                 " ".into(),
-            ])]);
-            assert_buffer_eq!(buf, expected);
+            ])]));
         }
 
         /// When the area passed to render overflows the buffer, the content should be truncated
@@ -663,11 +655,10 @@ mod tests {
             let mut buf = Buffer::empty(Rect::new(0, 0, 15, 1));
             span.render(Rect::new(10, 0, 20, 1), &mut buf);
 
-            let expected = Buffer::with_lines(vec![Line::from(vec![
+            buf.assert_eq(&Buffer::with_lines(vec![Line::from(vec![
                 "          ".into(),
                 "test ".green().on_yellow(),
-            ])]);
-            assert_buffer_eq!(buf, expected);
+            ])]));
         }
     }
 }

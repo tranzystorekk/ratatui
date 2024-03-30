@@ -9,7 +9,6 @@ use std::{
 use unicode_width::UnicodeWidthStr;
 
 use crate::{
-    assert_buffer_eq,
     backend::{Backend, ClearType, WindowSize},
     buffer::{Buffer, Cell},
     layout::{Rect, Size},
@@ -30,7 +29,9 @@ use crate::{
 ///
 /// let mut backend = TestBackend::new(10, 2);
 /// backend.clear()?;
-/// backend.assert_buffer(&Buffer::with_lines(vec!["          "; 2]));
+/// backend
+///     .buffer()
+///     .assert_eq(&Buffer::with_lines(vec!["          "; 2]));
 /// # std::io::Result::Ok(())
 /// ```
 #[derive(Debug, Clone, Eq, PartialEq, Hash)]
@@ -100,8 +101,9 @@ impl TestBackend {
     /// If the buffers are not equal, a panic occurs with a detailed error message
     /// showing the differences between the expected and actual buffers.
     #[track_caller]
+    #[deprecated = "use self.buffer().assert_eq(&expected)"]
     pub fn assert_buffer(&self, expected: &Buffer) {
-        assert_buffer_eq!(&self.buffer, expected);
+        self.buffer.assert_eq(expected);
     }
 }
 
@@ -274,16 +276,21 @@ mod tests {
     #[test]
     fn buffer() {
         let backend = TestBackend::new(10, 2);
-        assert_eq!(backend.buffer(), &Buffer::with_lines(vec!["          "; 2]));
+        backend
+            .buffer()
+            .assert_eq(&Buffer::with_lines(vec!["          "; 2]));
     }
 
     #[test]
     fn resize() {
         let mut backend = TestBackend::new(10, 2);
         backend.resize(5, 5);
-        assert_eq!(backend.buffer(), &Buffer::with_lines(vec!["     "; 5]));
+        backend
+            .buffer()
+            .assert_eq(&Buffer::with_lines(vec!["     "; 5]));
     }
 
+    #[allow(deprecated)]
     #[test]
     fn assert_buffer() {
         let backend = TestBackend::new(10, 2);
@@ -291,6 +298,7 @@ mod tests {
         backend.assert_buffer(&buffer);
     }
 
+    #[allow(deprecated)]
     #[test]
     #[should_panic = "buffer contents not equal"]
     fn assert_buffer_panics() {
@@ -312,7 +320,9 @@ mod tests {
         cell.set_symbol("a");
         backend.draw([(0, 0, &cell)].into_iter()).unwrap();
         backend.draw([(0, 1, &cell)].into_iter()).unwrap();
-        backend.assert_buffer(&Buffer::with_lines(vec!["a         "; 2]));
+        backend
+            .buffer()
+            .assert_eq(&Buffer::with_lines(vec!["a         "; 2]));
     }
 
     #[test]
@@ -350,7 +360,7 @@ mod tests {
         backend.draw([(0, 0, &cell)].into_iter()).unwrap();
         backend.draw([(0, 1, &cell)].into_iter()).unwrap();
         backend.clear().unwrap();
-        backend.assert_buffer(&Buffer::with_lines(vec![
+        backend.buffer().assert_eq(&Buffer::with_lines(vec![
             "          ",
             "          ",
             "          ",
@@ -370,7 +380,7 @@ mod tests {
         ]);
 
         backend.clear_region(ClearType::All).unwrap();
-        backend.assert_buffer(&Buffer::with_lines(vec![
+        backend.buffer().assert_eq(&Buffer::with_lines(vec![
             "          ",
             "          ",
             "          ",
@@ -392,7 +402,7 @@ mod tests {
 
         backend.set_cursor(3, 2).unwrap();
         backend.clear_region(ClearType::AfterCursor).unwrap();
-        backend.assert_buffer(&Buffer::with_lines(vec![
+        backend.buffer().assert_eq(&Buffer::with_lines(vec![
             "aaaaaaaaaa",
             "aaaaaaaaaa",
             "aaaa      ",
@@ -414,7 +424,7 @@ mod tests {
 
         backend.set_cursor(5, 3).unwrap();
         backend.clear_region(ClearType::BeforeCursor).unwrap();
-        backend.assert_buffer(&Buffer::with_lines(vec![
+        backend.buffer().assert_eq(&Buffer::with_lines(vec![
             "          ",
             "          ",
             "          ",
@@ -436,7 +446,7 @@ mod tests {
 
         backend.set_cursor(3, 1).unwrap();
         backend.clear_region(ClearType::CurrentLine).unwrap();
-        backend.assert_buffer(&Buffer::with_lines(vec![
+        backend.buffer().assert_eq(&Buffer::with_lines(vec![
             "aaaaaaaaaa",
             "          ",
             "aaaaaaaaaa",
@@ -458,7 +468,7 @@ mod tests {
 
         backend.set_cursor(3, 0).unwrap();
         backend.clear_region(ClearType::UntilNewLine).unwrap();
-        backend.assert_buffer(&Buffer::with_lines(vec![
+        backend.buffer().assert_eq(&Buffer::with_lines(vec![
             "aaa       ",
             "aaaaaaaaaa",
             "aaaaaaaaaa",
@@ -496,7 +506,7 @@ mod tests {
         assert_eq!(backend.get_cursor().unwrap(), (4, 4));
 
         // As such the buffer should remain unchanged
-        backend.assert_buffer(&Buffer::with_lines(vec![
+        backend.buffer().assert_eq(&Buffer::with_lines(vec![
             "aaaaaaaaaa",
             "bbbbbbbbbb",
             "cccccccccc",
@@ -555,7 +565,7 @@ mod tests {
         assert_eq!(backend.get_cursor().unwrap(), (1, 4));
 
         // As such the buffer should remain unchanged
-        backend.assert_buffer(&Buffer::with_lines(vec![
+        backend.buffer().assert_eq(&Buffer::with_lines(vec![
             "aaaaaaaaaa",
             "bbbbbbbbbb",
             "cccccccccc",
@@ -580,7 +590,7 @@ mod tests {
         backend.append_lines(3).unwrap();
         assert_eq!(backend.get_cursor().unwrap(), (1, 4));
 
-        backend.assert_buffer(&Buffer::with_lines(vec![
+        backend.buffer().assert_eq(&Buffer::with_lines(vec![
             "cccccccccc",
             "dddddddddd",
             "eeeeeeeeee",
@@ -605,7 +615,7 @@ mod tests {
         backend.append_lines(5).unwrap();
         assert_eq!(backend.get_cursor().unwrap(), (1, 4));
 
-        backend.assert_buffer(&Buffer::with_lines(vec![
+        backend.buffer().assert_eq(&Buffer::with_lines(vec![
             "          ",
             "          ",
             "          ",
@@ -630,7 +640,7 @@ mod tests {
         backend.append_lines(5).unwrap();
         assert_eq!(backend.get_cursor().unwrap(), (1, 4));
 
-        backend.assert_buffer(&Buffer::with_lines(vec![
+        backend.buffer().assert_eq(&Buffer::with_lines(vec![
             "bbbbbbbbbb",
             "cccccccccc",
             "dddddddddd",

@@ -1334,7 +1334,6 @@ mod tests {
         use rstest::rstest;
 
         use crate::{
-            assert_buffer_eq,
             layout::flex::Flex,
             prelude::{Constraint::*, *},
             widgets::Paragraph,
@@ -1361,8 +1360,7 @@ mod tests {
                 let s = c.to_string().repeat(area.width as usize);
                 Paragraph::new(s).render(layout[i], &mut buffer);
             }
-            let expected = Buffer::with_lines(vec![expected]);
-            assert_buffer_eq!(buffer, expected);
+            buffer.assert_eq(&Buffer::with_lines(vec![expected]));
         }
 
         #[rstest]
