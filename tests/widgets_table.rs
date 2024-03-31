@@ -12,9 +12,8 @@ use ratatui::{
 
 #[test]
 fn widgets_table_column_spacing_can_be_changed() {
-    #[allow(clippy::needless_pass_by_value)]
     #[track_caller]
-    fn test_case(column_spacing: u16, expected: Buffer) {
+    fn test_case(column_spacing: u16, expected: &Buffer) {
         let backend = TestBackend::new(30, 10);
         let mut terminal = Terminal::new(backend).unwrap();
         terminal
@@ -39,13 +38,13 @@ fn widgets_table_column_spacing_can_be_changed() {
                 f.render_widget(table, size);
             })
             .unwrap();
-        terminal.backend().buffer().assert_eq(&expected);
+        terminal.backend().buffer().assert_eq(expected);
     }
 
     // no space between columns
     test_case(
         0,
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│Head1Head2Head3             │",
             "│                            │",
@@ -62,7 +61,7 @@ fn widgets_table_column_spacing_can_be_changed() {
     // one space between columns
     test_case(
         1,
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│Head1 Head2 Head3           │",
             "│                            │",
@@ -79,7 +78,7 @@ fn widgets_table_column_spacing_can_be_changed() {
     // enough space to just not hide the third column
     test_case(
         6,
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│Head1      Head2      Head3 │",
             "│                            │",
@@ -96,7 +95,7 @@ fn widgets_table_column_spacing_can_be_changed() {
     // enough space to hide part of the third column
     test_case(
         7,
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│Head1       Head       Head3│",
             "│                            │",
@@ -113,9 +112,8 @@ fn widgets_table_column_spacing_can_be_changed() {
 
 #[test]
 fn widgets_table_columns_widths_can_use_fixed_length_constraints() {
-    #[allow(clippy::needless_pass_by_value)]
     #[track_caller]
-    fn test_case(widths: &[Constraint], expected: Buffer) {
+    fn test_case(widths: &[Constraint], expected: &Buffer) {
         let backend = TestBackend::new(30, 10);
         let mut terminal = Terminal::new(backend).unwrap();
         terminal
@@ -135,7 +133,7 @@ fn widgets_table_columns_widths_can_use_fixed_length_constraints() {
                 f.render_widget(table, size);
             })
             .unwrap();
-        terminal.backend().buffer().assert_eq(&expected);
+        terminal.backend().buffer().assert_eq(expected);
     }
 
     // columns of zero width show nothing
@@ -145,7 +143,7 @@ fn widgets_table_columns_widths_can_use_fixed_length_constraints() {
             Constraint::Length(0),
             Constraint::Length(0),
         ],
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│                            │",
             "│                            │",
@@ -166,7 +164,7 @@ fn widgets_table_columns_widths_can_use_fixed_length_constraints() {
             Constraint::Length(1),
             Constraint::Length(1),
         ],
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│H H H                       │",
             "│                            │",
@@ -187,7 +185,7 @@ fn widgets_table_columns_widths_can_use_fixed_length_constraints() {
             Constraint::Length(8),
             Constraint::Length(8),
         ],
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│Head1    Head2    Head3     │",
             "│                            │",
@@ -204,9 +202,8 @@ fn widgets_table_columns_widths_can_use_fixed_length_constraints() {
 
 #[test]
 fn widgets_table_columns_widths_can_use_percentage_constraints() {
-    #[allow(clippy::needless_pass_by_value)]
     #[track_caller]
-    fn test_case(widths: &[Constraint], expected: Buffer) {
+    fn test_case(widths: &[Constraint], expected: &Buffer) {
         let backend = TestBackend::new(30, 10);
         let mut terminal = Terminal::new(backend).unwrap();
         terminal
@@ -227,7 +224,7 @@ fn widgets_table_columns_widths_can_use_percentage_constraints() {
                 f.render_widget(table, size);
             })
             .unwrap();
-        terminal.backend().buffer().assert_eq(&expected);
+        terminal.backend().buffer().assert_eq(expected);
     }
 
     // columns of zero width show nothing
@@ -237,7 +234,7 @@ fn widgets_table_columns_widths_can_use_percentage_constraints() {
             Constraint::Percentage(0),
             Constraint::Percentage(0),
         ],
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│                            │",
             "│                            │",
@@ -258,7 +255,7 @@ fn widgets_table_columns_widths_can_use_percentage_constraints() {
             Constraint::Percentage(11),
             Constraint::Percentage(11),
         ],
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│HeaHeaHea                   │",
             "│                            │",
@@ -279,7 +276,7 @@ fn widgets_table_columns_widths_can_use_percentage_constraints() {
             Constraint::Percentage(33),
             Constraint::Percentage(33),
         ],
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│Head1    Head2    Head3     │",
             "│                            │",
@@ -296,7 +293,7 @@ fn widgets_table_columns_widths_can_use_percentage_constraints() {
     // percentages summing to 100 should give equal widths
     test_case(
         &[Constraint::Percentage(50), Constraint::Percentage(50)],
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│Head1         Head2         │",
             "│                            │",
@@ -313,9 +310,8 @@ fn widgets_table_columns_widths_can_use_percentage_constraints() {
 
 #[test]
 fn widgets_table_columns_widths_can_use_mixed_constraints() {
-    #[allow(clippy::needless_pass_by_value)]
     #[track_caller]
-    fn test_case(widths: &[Constraint], expected: Buffer) {
+    fn test_case(widths: &[Constraint], expected: &Buffer) {
         let backend = TestBackend::new(30, 10);
         let mut terminal = Terminal::new(backend).unwrap();
         terminal
@@ -335,7 +331,7 @@ fn widgets_table_columns_widths_can_use_mixed_constraints() {
                 f.render_widget(table, size);
             })
             .unwrap();
-        terminal.backend().buffer().assert_eq(&expected);
+        terminal.backend().buffer().assert_eq(expected);
     }
 
     // columns of zero width show nothing
@@ -345,7 +341,7 @@ fn widgets_table_columns_widths_can_use_mixed_constraints() {
             Constraint::Length(0),
             Constraint::Percentage(0),
         ],
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│                            │",
             "│                            │",
@@ -366,7 +362,7 @@ fn widgets_table_columns_widths_can_use_mixed_constraints() {
             Constraint::Length(20),
             Constraint::Percentage(11),
         ],
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│Hea Head2                Hea│",
             "│                            │",
@@ -387,7 +383,7 @@ fn widgets_table_columns_widths_can_use_mixed_constraints() {
             Constraint::Length(10),
             Constraint::Percentage(33),
         ],
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│Head1     Head2      Head3  │",
             "│                            │",
@@ -408,7 +404,7 @@ fn widgets_table_columns_widths_can_use_mixed_constraints() {
             Constraint::Length(10),
             Constraint::Percentage(60),
         ],
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│Head1      Head2      Head3 │",
             "│                            │",
@@ -425,9 +421,8 @@ fn widgets_table_columns_widths_can_use_mixed_constraints() {
 
 #[test]
 fn widgets_table_columns_widths_can_use_ratio_constraints() {
-    #[allow(clippy::needless_pass_by_value)]
     #[track_caller]
-    fn test_case(widths: &[Constraint], expected: Buffer) {
+    fn test_case(widths: &[Constraint], expected: &Buffer) {
         let backend = TestBackend::new(30, 10);
         let mut terminal = Terminal::new(backend).unwrap();
         terminal
@@ -448,7 +443,7 @@ fn widgets_table_columns_widths_can_use_ratio_constraints() {
                 f.render_widget(table, size);
             })
             .unwrap();
-        terminal.backend().buffer().assert_eq(&expected);
+        terminal.backend().buffer().assert_eq(expected);
     }
 
     // columns of zero width show nothing
@@ -458,7 +453,7 @@ fn widgets_table_columns_widths_can_use_ratio_constraints() {
             Constraint::Ratio(0, 1),
             Constraint::Ratio(0, 1),
         ],
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│                            │",
             "│                            │",
@@ -479,7 +474,7 @@ fn widgets_table_columns_widths_can_use_ratio_constraints() {
             Constraint::Ratio(1, 9),
             Constraint::Ratio(1, 9),
         ],
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│HeaHeaHea                   │",
             "│                            │",
@@ -500,7 +495,7 @@ fn widgets_table_columns_widths_can_use_ratio_constraints() {
             Constraint::Ratio(1, 3),
             Constraint::Ratio(1, 3),
         ],
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│Head1    Head2     Head3    │",
             "│                            │",
@@ -517,7 +512,7 @@ fn widgets_table_columns_widths_can_use_ratio_constraints() {
     // percentages summing to 100 should give equal widths
     test_case(
         &[Constraint::Ratio(1, 2), Constraint::Ratio(1, 2)],
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│Head1         Head2         │",
             "│                            │",
@@ -534,9 +529,8 @@ fn widgets_table_columns_widths_can_use_ratio_constraints() {
 
 #[test]
 fn widgets_table_can_have_rows_with_multi_lines() {
-    #[allow(clippy::needless_pass_by_value)]
     #[track_caller]
-    fn test_case(state: &mut TableState, expected: Buffer) {
+    fn test_case(state: &mut TableState, expected: &Buffer) {
         let backend = TestBackend::new(30, 8);
         let mut terminal = Terminal::new(backend).unwrap();
         terminal
@@ -562,14 +556,14 @@ fn widgets_table_can_have_rows_with_multi_lines() {
                 f.render_stateful_widget(table, size, state);
             })
             .unwrap();
-        terminal.backend().buffer().assert_eq(&expected);
+        terminal.backend().buffer().assert_eq(expected);
     }
 
     let mut state = TableState::default();
     // no selection
     test_case(
         &mut state,
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│Head1 Head2 Head3           │",
             "│                            │",
@@ -585,7 +579,7 @@ fn widgets_table_can_have_rows_with_multi_lines() {
     state.select(Some(0));
     test_case(
         &mut state,
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│   Head1 Head2 Head3        │",
             "│                            │",
@@ -601,7 +595,7 @@ fn widgets_table_can_have_rows_with_multi_lines() {
     state.select(Some(1));
     test_case(
         &mut state,
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│   Head1 Head2 Head3        │",
             "│                            │",
@@ -617,7 +611,7 @@ fn widgets_table_can_have_rows_with_multi_lines() {
     state.select(Some(3));
     test_case(
         &mut state,
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│   Head1 Head2 Head3        │",
             "│                            │",
@@ -633,9 +627,8 @@ fn widgets_table_can_have_rows_with_multi_lines() {
 #[allow(clippy::too_many_lines)]
 #[test]
 fn widgets_table_enable_always_highlight_spacing() {
-    #[allow(clippy::needless_pass_by_value)]
     #[track_caller]
-    fn test_case(state: &mut TableState, space: HighlightSpacing, expected: Buffer) {
+    fn test_case(state: &mut TableState, space: HighlightSpacing, expected: &Buffer) {
         let backend = TestBackend::new(30, 8);
         let mut terminal = Terminal::new(backend).unwrap();
         terminal
@@ -662,7 +655,7 @@ fn widgets_table_enable_always_highlight_spacing() {
                 f.render_stateful_widget(table, size, state);
             })
             .unwrap();
-        terminal.backend().buffer().assert_eq(&expected);
+        terminal.backend().buffer().assert_eq(expected);
     }
 
     assert_eq!(HighlightSpacing::default(), HighlightSpacing::WhenSelected);
@@ -672,7 +665,7 @@ fn widgets_table_enable_always_highlight_spacing() {
     test_case(
         &mut state,
         HighlightSpacing::default(),
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│Head1 Head2 Head3           │",
             "│                            │",
@@ -688,7 +681,7 @@ fn widgets_table_enable_always_highlight_spacing() {
     test_case(
         &mut state,
         HighlightSpacing::Always,
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│   Head1 Head2 Head3        │",
             "│                            │",
@@ -704,7 +697,7 @@ fn widgets_table_enable_always_highlight_spacing() {
     test_case(
         &mut state,
         HighlightSpacing::Never,
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│Head1 Head2 Head3           │",
             "│                            │",
@@ -721,7 +714,7 @@ fn widgets_table_enable_always_highlight_spacing() {
     test_case(
         &mut state,
         HighlightSpacing::default(),
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│   Head1 Head2 Head3        │",
             "│                            │",
@@ -738,7 +731,7 @@ fn widgets_table_enable_always_highlight_spacing() {
     test_case(
         &mut state,
         HighlightSpacing::Always,
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│   Head1 Head2 Head3        │",
             "│                            │",
@@ -755,7 +748,7 @@ fn widgets_table_enable_always_highlight_spacing() {
     test_case(
         &mut state,
         HighlightSpacing::Never,
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│Head1 Head2 Head3           │",
             "│                            │",

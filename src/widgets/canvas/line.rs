@@ -115,17 +115,14 @@ mod tests {
     use super::Line;
     use crate::{prelude::*, widgets::canvas::Canvas};
 
-    #[allow(clippy::needless_pass_by_value)]
     #[track_caller]
-    fn test(line: Line, expected_lines: Vec<&str>) {
+    fn test(line: &Line, expected_lines: Vec<&str>) {
         let mut buffer = Buffer::empty(Rect::new(0, 0, 10, 10));
         let canvas = Canvas::default()
             .marker(Marker::Dot)
             .x_bounds([0.0, 10.0])
             .y_bounds([0.0, 10.0])
-            .paint(|context| {
-                context.draw(&line);
-            });
+            .paint(|context| context.draw(line));
         canvas.render(buffer.area, &mut buffer);
 
         let mut expected = Buffer::with_lines(expected_lines);
@@ -140,11 +137,11 @@ mod tests {
     #[test]
     fn off_grid() {
         test(
-            Line::new(-1.0, -1.0, 10.0, 10.0, Color::Red),
+            &Line::new(-1.0, -1.0, 10.0, 10.0, Color::Red),
             vec!["          "; 10],
         );
         test(
-            Line::new(0.0, 0.0, 11.0, 11.0, Color::Red),
+            &Line::new(0.0, 0.0, 11.0, 11.0, Color::Red),
             vec!["          "; 10],
         );
     }
@@ -152,7 +149,7 @@ mod tests {
     #[test]
     fn horizontal() {
         test(
-            Line::new(0.0, 0.0, 10.0, 0.0, Color::Red),
+            &Line::new(0.0, 0.0, 10.0, 0.0, Color::Red),
             vec![
                 "          ",
                 "          ",
@@ -167,7 +164,7 @@ mod tests {
             ],
         );
         test(
-            Line::new(10.0, 10.0, 0.0, 10.0, Color::Red),
+            &Line::new(10.0, 10.0, 0.0, 10.0, Color::Red),
             vec![
                 "••••••••••",
                 "          ",
@@ -186,11 +183,11 @@ mod tests {
     #[test]
     fn vertical() {
         test(
-            Line::new(0.0, 0.0, 0.0, 10.0, Color::Red),
+            &Line::new(0.0, 0.0, 0.0, 10.0, Color::Red),
             vec!["•         "; 10],
         );
         test(
-            Line::new(10.0, 10.0, 10.0, 0.0, Color::Red),
+            &Line::new(10.0, 10.0, 10.0, 0.0, Color::Red),
             vec!["         •"; 10],
         );
     }
@@ -199,7 +196,7 @@ mod tests {
     fn diagonal() {
         // dy < dx, x1 < x2
         test(
-            Line::new(0.0, 0.0, 10.0, 5.0, Color::Red),
+            &Line::new(0.0, 0.0, 10.0, 5.0, Color::Red),
             vec![
                 "          ",
                 "          ",
@@ -215,7 +212,7 @@ mod tests {
         );
         // dy < dx, x1 > x2
         test(
-            Line::new(10.0, 0.0, 0.0, 5.0, Color::Red),
+            &Line::new(10.0, 0.0, 0.0, 5.0, Color::Red),
             vec![
                 "          ",
                 "          ",
@@ -231,7 +228,7 @@ mod tests {
         );
         // dy > dx, y1 < y2
         test(
-            Line::new(0.0, 0.0, 5.0, 10.0, Color::Red),
+            &Line::new(0.0, 0.0, 5.0, 10.0, Color::Red),
             vec![
                 "    •     ",
                 "    •     ",
@@ -247,7 +244,7 @@ mod tests {
         );
         // dy > dx, y1 > y2
         test(
-            Line::new(0.0, 10.0, 5.0, 0.0, Color::Red),
+            &Line::new(0.0, 10.0, 5.0, 0.0, Color::Red),
             vec![
                 "•         ",
                 "•         ",

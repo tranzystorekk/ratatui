@@ -9,9 +9,8 @@ use ratatui::{
 
 /// Tests the [`Paragraph`] widget against the expected [`Buffer`] by rendering it onto an equal
 /// area and comparing the rendered and expected content.
-#[allow(clippy::needless_pass_by_value)]
 #[track_caller]
-fn test_case(paragraph: Paragraph, expected: Buffer) {
+fn test_case(paragraph: Paragraph, expected: &Buffer) {
     let backend = TestBackend::new(expected.area.width, expected.area.height);
     let mut terminal = Terminal::new(backend).unwrap();
     terminal
@@ -20,7 +19,7 @@ fn test_case(paragraph: Paragraph, expected: Buffer) {
             f.render_widget(paragraph, size);
         })
         .unwrap();
-    terminal.backend().buffer().assert_eq(&expected);
+    terminal.backend().buffer().assert_eq(expected);
 }
 
 #[test]
@@ -34,7 +33,7 @@ fn widgets_paragraph_renders_double_width_graphemes() {
 
     test_case(
         paragraph,
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────┐",
             "│コンピュ│",
             "│ータ上で│",
@@ -88,7 +87,7 @@ fn widgets_paragraph_can_wrap_with_a_trailing_nbsp() {
 
     test_case(
         paragraph,
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌──────────────────┐",
             "│NBSP\u{00a0}             │",
             "└──────────────────┘",
@@ -104,7 +103,7 @@ fn widgets_paragraph_can_scroll_horizontally() {
 
     test_case(
         paragraph.clone().alignment(Alignment::Left).scroll((0, 7)),
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌──────────────────┐",
             "│在可以水平滚动了！│",
             "│ph can scroll hori│",
@@ -120,7 +119,7 @@ fn widgets_paragraph_can_scroll_horizontally() {
     // only support Alignment::Left
     test_case(
         paragraph.clone().alignment(Alignment::Right).scroll((0, 7)),
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌──────────────────┐",
             "│段落现在可以水平滚│",
             "│Paragraph can scro│",
@@ -149,7 +148,7 @@ fn widgets_paragraph_can_wrap_its_content() {
 
     test_case(
         paragraph.clone().alignment(Alignment::Left),
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌──────────────────┐",
             "│The library is    │",
             "│based on the      │",
@@ -164,7 +163,7 @@ fn widgets_paragraph_can_wrap_its_content() {
     );
     test_case(
         paragraph.clone().alignment(Alignment::Center),
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌──────────────────┐",
             "│  The library is  │",
             "│   based on the   │",
@@ -179,7 +178,7 @@ fn widgets_paragraph_can_wrap_its_content() {
     );
     test_case(
         paragraph.clone().alignment(Alignment::Right),
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌──────────────────┐",
             "│    The library is│",
             "│      based on the│",
@@ -208,7 +207,7 @@ fn widgets_paragraph_works_with_padding() {
 
     test_case(
         paragraph.clone().alignment(Alignment::Left),
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────┐",
             "│                    │",
             "│  The library is    │",
@@ -225,7 +224,7 @@ fn widgets_paragraph_works_with_padding() {
     );
     test_case(
         paragraph.clone().alignment(Alignment::Right),
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────┐",
             "│                    │",
             "│    The library is  │",
@@ -254,7 +253,7 @@ fn widgets_paragraph_works_with_padding() {
 
     test_case(
         paragraph.alignment(Alignment::Right),
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────┐",
             "│                    │",
             "│   This is always   │",
@@ -288,7 +287,7 @@ fn widgets_paragraph_can_align_spans() {
 
     test_case(
         paragraph.clone().alignment(Alignment::Left),
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌──────────────────┐",
             "│  This string will│",
             "│      override the│",
@@ -303,7 +302,7 @@ fn widgets_paragraph_can_align_spans() {
     );
     test_case(
         paragraph.alignment(Alignment::Center),
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌──────────────────┐",
             "│  This string will│",
             "│      override the│",
@@ -337,7 +336,7 @@ fn widgets_paragraph_can_align_spans() {
 
     test_case(
         paragraph.clone().alignment(Alignment::Right),
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌──────────────────┐",
             "│This string       │",
             "│will override the │",
@@ -352,7 +351,7 @@ fn widgets_paragraph_can_align_spans() {
     );
     test_case(
         paragraph.alignment(Alignment::Left),
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌──────────────────┐",
             "│This string       │",
             "│will override the │",

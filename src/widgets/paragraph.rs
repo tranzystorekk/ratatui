@@ -413,9 +413,8 @@ mod test {
     /// area and comparing the rendered and expected content.
     /// This can be used for easy testing of varying configured paragraphs with the same expected
     /// buffer or any other test case really.
-    #[allow(clippy::needless_pass_by_value)]
     #[track_caller]
-    fn test_case(paragraph: &Paragraph, expected: Buffer) {
+    fn test_case(paragraph: &Paragraph, expected: &Buffer) {
         let backend = TestBackend::new(expected.area.width, expected.area.height);
         let mut terminal = Terminal::new(backend).unwrap();
         terminal
@@ -424,7 +423,7 @@ mod test {
                 f.render_widget(paragraph.clone(), size);
             })
             .unwrap();
-        terminal.backend().buffer().assert_eq(&expected);
+        terminal.backend().buffer().assert_eq(expected);
     }
 
     #[test]
@@ -436,10 +435,10 @@ mod test {
             Paragraph::new(line).wrap(Wrap { trim: true }),
         ];
         for paragraph in paragraphs {
-            test_case(&paragraph, Buffer::with_lines(vec!["foo"]));
-            test_case(&paragraph, Buffer::with_lines(vec!["foo   "]));
-            test_case(&paragraph, Buffer::with_lines(vec!["foo   ", "      "]));
-            test_case(&paragraph, Buffer::with_lines(vec!["foo", "   "]));
+            test_case(&paragraph, &Buffer::with_lines(vec!["foo"]));
+            test_case(&paragraph, &Buffer::with_lines(vec!["foo   "]));
+            test_case(&paragraph, &Buffer::with_lines(vec!["foo   ", "      "]));
+            test_case(&paragraph, &Buffer::with_lines(vec!["foo", "   "]));
         }
     }
 
@@ -451,10 +450,10 @@ mod test {
             Paragraph::new("").wrap(Wrap { trim: true }),
         ];
         for paragraph in paragraphs {
-            test_case(&paragraph, Buffer::with_lines(vec![" "]));
-            test_case(&paragraph, Buffer::with_lines(vec!["          "]));
-            test_case(&paragraph, Buffer::with_lines(vec!["     "; 10]));
-            test_case(&paragraph, Buffer::with_lines(vec![" ", " "]));
+            test_case(&paragraph, &Buffer::with_lines(vec![" "]));
+            test_case(&paragraph, &Buffer::with_lines(vec!["          "]));
+            test_case(&paragraph, &Buffer::with_lines(vec!["     "; 10]));
+            test_case(&paragraph, &Buffer::with_lines(vec![" ", " "]));
         }
     }
 
@@ -467,15 +466,15 @@ mod test {
             Paragraph::new(text).wrap(Wrap { trim: true }),
         ];
         for paragraph in paragraphs {
-            test_case(&paragraph, Buffer::with_lines(vec!["Hello, world!  "]));
-            test_case(&paragraph, Buffer::with_lines(vec!["Hello, world!"]));
+            test_case(&paragraph, &Buffer::with_lines(vec!["Hello, world!  "]));
+            test_case(&paragraph, &Buffer::with_lines(vec!["Hello, world!"]));
             test_case(
                 &paragraph,
-                Buffer::with_lines(vec!["Hello, world!  ", "               "]),
+                &Buffer::with_lines(vec!["Hello, world!  ", "               "]),
             );
             test_case(
                 &paragraph,
-                Buffer::with_lines(vec!["Hello, world!", "             "]),
+                &Buffer::with_lines(vec!["Hello, world!", "             "]),
             );
         }
     }
@@ -491,11 +490,11 @@ mod test {
         for paragraph in paragraphs {
             test_case(
                 &paragraph,
-                Buffer::with_lines(vec!["This is a ", "multiline ", "paragraph."]),
+                &Buffer::with_lines(vec!["This is a ", "multiline ", "paragraph."]),
             );
             test_case(
                 &paragraph,
-                Buffer::with_lines(vec![
+                &Buffer::with_lines(vec![
                     "This is a      ",
                     "multiline      ",
                     "paragraph.     ",
@@ -503,7 +502,7 @@ mod test {
             );
             test_case(
                 &paragraph,
-                Buffer::with_lines(vec![
+                &Buffer::with_lines(vec![
                     "This is a      ",
                     "multiline      ",
                     "paragraph.     ",
@@ -529,7 +528,7 @@ mod test {
         for paragraph in paragraphs {
             test_case(
                 paragraph,
-                Buffer::with_lines(vec![
+                &Buffer::with_lines(vec![
                     "┌Title─────────┐",
                     "│Hello, worlds!│",
                     "└──────────────┘",
@@ -537,7 +536,7 @@ mod test {
             );
             test_case(
                 paragraph,
-                Buffer::with_lines(vec![
+                &Buffer::with_lines(vec![
                     "┌Title───────────┐",
                     "│Hello, worlds!  │",
                     "└────────────────┘",
@@ -545,7 +544,7 @@ mod test {
             );
             test_case(
                 paragraph,
-                Buffer::with_lines(vec![
+                &Buffer::with_lines(vec![
                     "┌Title────────────┐",
                     "│Hello, worlds!   │",
                     "│                 │",
@@ -556,7 +555,7 @@ mod test {
 
         test_case(
             &truncated_paragraph,
-            Buffer::with_lines(vec![
+            &Buffer::with_lines(vec![
                 "┌Title───────┐",
                 "│Hello, world│",
                 "│            │",
@@ -565,7 +564,7 @@ mod test {
         );
         test_case(
             &wrapped_paragraph,
-            Buffer::with_lines(vec![
+            &Buffer::with_lines(vec![
                 "┌Title──────┐",
                 "│Hello,     │",
                 "│worlds!    │",
@@ -574,7 +573,7 @@ mod test {
         );
         test_case(
             &trimmed_paragraph,
-            Buffer::with_lines(vec![
+            &Buffer::with_lines(vec![
                 "┌Title──────┐",
                 "│Hello,     │",
                 "│worlds!    │",
@@ -597,7 +596,7 @@ mod test {
         expected.set_style(Rect::new(0, 2, 9, 1), Style::new().cyan());
         expected.set_style(Rect::new(0, 3, 8, 1), Style::new().dim());
 
-        test_case(&paragraph, expected);
+        test_case(&paragraph, &expected);
     }
 
     #[test]
@@ -614,7 +613,7 @@ mod test {
         expected.set_style(Rect::new(0, 0, 4, 1), Style::new().bold());
         expected.set_style(Rect::new(9, 0, 4, 1), Style::new().cyan());
 
-        test_case(&paragraph, expected);
+        test_case(&paragraph, &expected);
     }
 
     #[test]
@@ -627,7 +626,7 @@ mod test {
 
         test_case(
             &paragraph,
-            Buffer::with_lines(vec!["Hello, world!  ", "Title──────────"]),
+            &Buffer::with_lines(vec!["Hello, world!  ", "Title──────────"]),
         );
     }
 
@@ -639,7 +638,7 @@ mod test {
 
         test_case(
             &wrapped_paragraph,
-            Buffer::with_lines(vec![
+            &Buffer::with_lines(vec![
                 "This is a long line",
                 "of text that should",
                 "wrap      and      ",
@@ -650,7 +649,7 @@ mod test {
         );
         test_case(
             &wrapped_paragraph,
-            Buffer::with_lines(vec![
+            &Buffer::with_lines(vec![
                 "This is a   ",
                 "long line of",
                 "text that   ",
@@ -665,7 +664,7 @@ mod test {
 
         test_case(
             &trimmed_paragraph,
-            Buffer::with_lines(vec![
+            &Buffer::with_lines(vec![
                 "This is a long line",
                 "of text that should",
                 "wrap      and      ",
@@ -676,7 +675,7 @@ mod test {
         );
         test_case(
             &trimmed_paragraph,
-            Buffer::with_lines(vec![
+            &Buffer::with_lines(vec![
                 "This is a   ",
                 "long line of",
                 "text that   ",
@@ -697,19 +696,19 @@ mod test {
 
         test_case(
             &truncated_paragraph,
-            Buffer::with_lines(vec!["This is a long line of"]),
+            &Buffer::with_lines(vec!["This is a long line of"]),
         );
         test_case(
             &truncated_paragraph,
-            Buffer::with_lines(vec!["This is a long line of te"]),
+            &Buffer::with_lines(vec!["This is a long line of te"]),
         );
         test_case(
             &truncated_paragraph,
-            Buffer::with_lines(vec!["This is a long line of "]),
+            &Buffer::with_lines(vec!["This is a long line of "]),
         );
         test_case(
             &truncated_paragraph.clone().scroll((0, 2)),
-            Buffer::with_lines(vec!["is is a long line of te"]),
+            &Buffer::with_lines(vec!["is is a long line of te"]),
         );
     }
 
@@ -723,18 +722,21 @@ mod test {
         let paragraphs = vec![&truncated_paragraph, &wrapped_paragraph, &trimmed_paragraph];
 
         for paragraph in paragraphs {
-            test_case(paragraph, Buffer::with_lines(vec!["Hello, world!  "]));
-            test_case(paragraph, Buffer::with_lines(vec!["Hello, world!"]));
+            test_case(paragraph, &Buffer::with_lines(vec!["Hello, world!  "]));
+            test_case(paragraph, &Buffer::with_lines(vec!["Hello, world!"]));
         }
 
-        test_case(&truncated_paragraph, Buffer::with_lines(vec!["Hello, wor"]));
+        test_case(
+            &truncated_paragraph,
+            &Buffer::with_lines(vec!["Hello, wor"]),
+        );
         test_case(
             &wrapped_paragraph,
-            Buffer::with_lines(vec!["Hello,    ", "world!    "]),
+            &Buffer::with_lines(vec!["Hello,    ", "world!    "]),
         );
         test_case(
             &trimmed_paragraph,
-            Buffer::with_lines(vec!["Hello,    ", "world!    "]),
+            &Buffer::with_lines(vec!["Hello,    ", "world!    "]),
         );
     }
 
@@ -748,20 +750,23 @@ mod test {
         let paragraphs = vec![&truncated_paragraph, &wrapped_paragraph, &trimmed_paragraph];
 
         for paragraph in paragraphs {
-            test_case(paragraph, Buffer::with_lines(vec![" Hello, world! "]));
-            test_case(paragraph, Buffer::with_lines(vec!["  Hello, world! "]));
-            test_case(paragraph, Buffer::with_lines(vec!["  Hello, world!  "]));
-            test_case(paragraph, Buffer::with_lines(vec!["Hello, world!"]));
+            test_case(paragraph, &Buffer::with_lines(vec![" Hello, world! "]));
+            test_case(paragraph, &Buffer::with_lines(vec!["  Hello, world! "]));
+            test_case(paragraph, &Buffer::with_lines(vec!["  Hello, world!  "]));
+            test_case(paragraph, &Buffer::with_lines(vec!["Hello, world!"]));
         }
 
-        test_case(&truncated_paragraph, Buffer::with_lines(vec!["Hello, wor"]));
+        test_case(
+            &truncated_paragraph,
+            &Buffer::with_lines(vec!["Hello, wor"]),
+        );
         test_case(
             &wrapped_paragraph,
-            Buffer::with_lines(vec!["  Hello,  ", "  world!  "]),
+            &Buffer::with_lines(vec!["  Hello,  ", "  world!  "]),
         );
         test_case(
             &trimmed_paragraph,
-            Buffer::with_lines(vec!["  Hello,  ", "  world!  "]),
+            &Buffer::with_lines(vec!["  Hello,  ", "  world!  "]),
         );
     }
 
@@ -775,18 +780,21 @@ mod test {
         let paragraphs = vec![&truncated_paragraph, &wrapped_paragraph, &trimmed_paragraph];
 
         for paragraph in paragraphs {
-            test_case(paragraph, Buffer::with_lines(vec!["  Hello, world!"]));
-            test_case(paragraph, Buffer::with_lines(vec!["Hello, world!"]));
+            test_case(paragraph, &Buffer::with_lines(vec!["  Hello, world!"]));
+            test_case(paragraph, &Buffer::with_lines(vec!["Hello, world!"]));
         }
 
-        test_case(&truncated_paragraph, Buffer::with_lines(vec!["Hello, wor"]));
+        test_case(
+            &truncated_paragraph,
+            &Buffer::with_lines(vec!["Hello, wor"]),
+        );
         test_case(
             &wrapped_paragraph,
-            Buffer::with_lines(vec!["    Hello,", "    world!"]),
+            &Buffer::with_lines(vec!["    Hello,", "    world!"]),
         );
         test_case(
             &trimmed_paragraph,
-            Buffer::with_lines(vec!["    Hello,", "    world!"]),
+            &Buffer::with_lines(vec!["    Hello,", "    world!"]),
         );
     }
 
@@ -802,18 +810,18 @@ mod test {
         for paragraph in paragraphs {
             test_case(
                 paragraph,
-                Buffer::with_lines(vec!["multiline   ", "paragraph.  ", "            "]),
+                &Buffer::with_lines(vec!["multiline   ", "paragraph.  ", "            "]),
             );
-            test_case(paragraph, Buffer::with_lines(vec!["multiline   "]));
+            test_case(paragraph, &Buffer::with_lines(vec!["multiline   "]));
         }
 
         test_case(
             &truncated_paragraph.clone().scroll((2, 4)),
-            Buffer::with_lines(vec!["iline   ", "graph.  "]),
+            &Buffer::with_lines(vec!["iline   ", "graph.  "]),
         );
         test_case(
             &wrapped_paragraph,
-            Buffer::with_lines(vec!["cool   ", "multili", "ne     "]),
+            &Buffer::with_lines(vec!["cool   ", "multili", "ne     "]),
         );
     }
 
@@ -829,8 +837,8 @@ mod test {
 
         let area = Rect::new(0, 0, 0, 3);
         for paragraph in paragraphs {
-            test_case(&paragraph, Buffer::empty(area));
-            test_case(&paragraph.clone().scroll((2, 4)), Buffer::empty(area));
+            test_case(&paragraph, &Buffer::empty(area));
+            test_case(&paragraph.clone().scroll((2, 4)), &Buffer::empty(area));
         }
     }
 
@@ -846,8 +854,8 @@ mod test {
 
         let area = Rect::new(0, 0, 10, 0);
         for paragraph in paragraphs {
-            test_case(&paragraph, Buffer::empty(area));
-            test_case(&paragraph.clone().scroll((2, 4)), Buffer::empty(area));
+            test_case(&paragraph, &Buffer::empty(area));
+            test_case(&paragraph.clone().scroll((2, 4)), &Buffer::empty(area));
         }
     }
 
@@ -876,7 +884,7 @@ mod test {
         for paragraph in paragraphs {
             test_case(
                 &paragraph.style(Style::default().bg(Color::Green)),
-                expected_buffer.clone(),
+                &expected_buffer,
             );
         }
     }
@@ -891,15 +899,18 @@ mod test {
         ];
 
         for paragraph in paragraphs {
-            test_case(&paragraph, Buffer::with_lines(vec!["Hello, <world>!"]));
-            test_case(&paragraph, Buffer::with_lines(vec!["Hello, <world>!     "]));
+            test_case(&paragraph, &Buffer::with_lines(vec!["Hello, <world>!"]));
             test_case(
                 &paragraph,
-                Buffer::with_lines(vec!["Hello, <world>!     ", "                    "]),
+                &Buffer::with_lines(vec!["Hello, <world>!     "]),
             );
             test_case(
                 &paragraph,
-                Buffer::with_lines(vec!["Hello, <world>!", "               "]),
+                &Buffer::with_lines(vec!["Hello, <world>!     ", "                    "]),
+            );
+            test_case(
+                &paragraph,
+                &Buffer::with_lines(vec!["Hello, <world>!", "               "]),
             );
         }
     }
@@ -914,24 +925,24 @@ mod test {
         let paragraphs = vec![&truncated_paragraph, &wrapped_paragraph, &trimmed_paragraph];
 
         for paragraph in paragraphs {
-            test_case(paragraph, Buffer::with_lines(vec!["こんにちは, 世界! 😃"]));
+            test_case(paragraph, &Buffer::with_lines(vec!["こんにちは, 世界! 😃"]));
             test_case(
                 paragraph,
-                Buffer::with_lines(vec!["こんにちは, 世界! 😃     "]),
+                &Buffer::with_lines(vec!["こんにちは, 世界! 😃     "]),
             );
         }
 
         test_case(
             &truncated_paragraph,
-            Buffer::with_lines(vec!["こんにちは, 世 "]),
+            &Buffer::with_lines(vec!["こんにちは, 世 "]),
         );
         test_case(
             &wrapped_paragraph,
-            Buffer::with_lines(vec!["こんにちは,    ", "世界! 😃      "]),
+            &Buffer::with_lines(vec!["こんにちは,    ", "世界! 😃      "]),
         );
         test_case(
             &trimmed_paragraph,
-            Buffer::with_lines(vec!["こんにちは,    ", "世界! 😃      "]),
+            &Buffer::with_lines(vec!["こんにちは,    ", "世界! 😃      "]),
         );
     }
 

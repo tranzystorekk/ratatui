@@ -290,9 +290,8 @@ fn widget_list_should_not_ignore_empty_string_items() {
 #[allow(clippy::too_many_lines)]
 #[test]
 fn widgets_list_enable_always_highlight_spacing() {
-    #[allow(clippy::needless_pass_by_value)]
     #[track_caller]
-    fn test_case(state: &mut ListState, space: HighlightSpacing, expected: Buffer) {
+    fn test_case(state: &mut ListState, space: HighlightSpacing, expected: &Buffer) {
         let backend = TestBackend::new(30, 8);
         let mut terminal = Terminal::new(backend).unwrap();
         terminal
@@ -309,7 +308,7 @@ fn widgets_list_enable_always_highlight_spacing() {
                 f.render_stateful_widget(table, size, state);
             })
             .unwrap();
-        terminal.backend().buffer().assert_eq(&expected);
+        terminal.backend().buffer().assert_eq(expected);
     }
 
     assert_eq!(HighlightSpacing::default(), HighlightSpacing::WhenSelected);
@@ -319,7 +318,7 @@ fn widgets_list_enable_always_highlight_spacing() {
     test_case(
         &mut state,
         HighlightSpacing::default(),
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│Item 1                      │",
             "│Item 1a                     │",
@@ -335,7 +334,7 @@ fn widgets_list_enable_always_highlight_spacing() {
     test_case(
         &mut state,
         HighlightSpacing::Always,
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│   Item 1                   │",
             "│   Item 1a                  │",
@@ -351,7 +350,7 @@ fn widgets_list_enable_always_highlight_spacing() {
     test_case(
         &mut state,
         HighlightSpacing::Never,
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│Item 1                      │",
             "│Item 1a                     │",
@@ -368,7 +367,7 @@ fn widgets_list_enable_always_highlight_spacing() {
     test_case(
         &mut state,
         HighlightSpacing::default(),
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│>> Item 1                   │",
             "│   Item 1a                  │",
@@ -385,7 +384,7 @@ fn widgets_list_enable_always_highlight_spacing() {
     test_case(
         &mut state,
         HighlightSpacing::Always,
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│>> Item 1                   │",
             "│   Item 1a                  │",
@@ -402,7 +401,7 @@ fn widgets_list_enable_always_highlight_spacing() {
     test_case(
         &mut state,
         HighlightSpacing::Never,
-        Buffer::with_lines(vec![
+        &Buffer::with_lines(vec![
             "┌────────────────────────────┐",
             "│Item 1                      │",
             "│Item 1a                     │",
