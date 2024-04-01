@@ -23,21 +23,18 @@ fn widgets_barchart_not_full_below_max_value() {
             f.render_widget(barchart, size);
         })
         .unwrap();
-    terminal
-        .backend()
-        .buffer()
-        .assert_eq(&Buffer::with_lines(vec![
-            "┌────────────────────────────┐",
-            "│              ▇▇▇▇▇▇▇███████│",
-            "│              ██████████████│",
-            "│              ██████████████│",
-            "│       ▄▄▄▄▄▄▄██████████████│",
-            "│       █████████████████████│",
-            "│       █████████████████████│",
-            "│       ██50█████99█████100██│",
-            "│ empty  half  almost  full  │",
-            "└────────────────────────────┘",
-        ]));
+    terminal.backend().buffer().assert_eq(&Buffer::with_lines([
+        "┌────────────────────────────┐",
+        "│              ▇▇▇▇▇▇▇███████│",
+        "│              ██████████████│",
+        "│              ██████████████│",
+        "│       ▄▄▄▄▄▄▄██████████████│",
+        "│       █████████████████████│",
+        "│       █████████████████████│",
+        "│       ██50█████99█████100██│",
+        "│ empty  half  almost  full  │",
+        "└────────────────────────────┘",
+    ]));
 }
 
 #[test]
@@ -73,7 +70,7 @@ fn widgets_barchart_group() {
         })
         .unwrap();
 
-    let mut expected = Buffer::with_lines(vec![
+    let mut expected = Buffer::with_lines([
         "┌─────────────────────────────────┐",
         "│                             ████│",
         "│                             ████│",

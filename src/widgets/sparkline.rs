@@ -264,21 +264,21 @@ mod tests {
     fn it_does_not_panic_if_max_is_zero() {
         let widget = Sparkline::default().data(&[0, 0, 0]);
         let buffer = render(widget, 6);
-        buffer.assert_eq(&Buffer::with_lines(vec!["   xxx"]));
+        buffer.assert_eq(&Buffer::with_lines(["   xxx"]));
     }
 
     #[test]
     fn it_does_not_panic_if_max_is_set_to_zero() {
         let widget = Sparkline::default().data(&[0, 1, 2]).max(0);
         let buffer = render(widget, 6);
-        buffer.assert_eq(&Buffer::with_lines(vec!["   xxx"]));
+        buffer.assert_eq(&Buffer::with_lines(["   xxx"]));
     }
 
     #[test]
     fn it_draws() {
         let widget = Sparkline::default().data(&[0, 1, 2, 3, 4, 5, 6, 7, 8]);
         let buffer = render(widget, 12);
-        buffer.assert_eq(&Buffer::with_lines(vec![" ▁▂▃▄▅▆▇█xxx"]));
+        buffer.assert_eq(&Buffer::with_lines([" ▁▂▃▄▅▆▇█xxx"]));
     }
 
     #[test]
@@ -287,7 +287,7 @@ mod tests {
             .data(&[0, 1, 2, 3, 4, 5, 6, 7, 8])
             .direction(RenderDirection::LeftToRight);
         let buffer = render(widget, 12);
-        buffer.assert_eq(&Buffer::with_lines(vec![" ▁▂▃▄▅▆▇█xxx"]));
+        buffer.assert_eq(&Buffer::with_lines([" ▁▂▃▄▅▆▇█xxx"]));
     }
 
     #[test]
@@ -296,7 +296,7 @@ mod tests {
             .data(&[0, 1, 2, 3, 4, 5, 6, 7, 8])
             .direction(RenderDirection::RightToLeft);
         let buffer = render(widget, 12);
-        buffer.assert_eq(&Buffer::with_lines(vec!["xxx█▇▆▅▄▃▂▁ "]));
+        buffer.assert_eq(&Buffer::with_lines(["xxx█▇▆▅▄▃▂▁ "]));
     }
 
     #[test]

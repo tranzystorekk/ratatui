@@ -46,10 +46,10 @@ mod tests {
 
     #[test]
     fn render() {
-        let mut buf = Buffer::with_lines(vec!["xxxxxxxxxxxxxxx"; 7]);
+        let mut buf = Buffer::with_lines(["xxxxxxxxxxxxxxx"; 7]);
         let clear = Clear;
         clear.render(Rect::new(1, 2, 3, 4), &mut buf);
-        buf.assert_eq(&Buffer::with_lines(vec![
+        buf.assert_eq(&Buffer::with_lines([
             "xxxxxxxxxxxxxxx",
             "xxxxxxxxxxxxxxx",
             "x   xxxxxxxxxxx",

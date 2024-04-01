@@ -1245,7 +1245,7 @@ mod tests {
             .hidden_legend_constraints((100.into(), 100.into()));
         let mut buffer = Buffer::empty(Rect::new(0, 0, 20, 5));
         widget.render(buffer.area, &mut buffer);
-        buffer.assert_eq(&Buffer::with_lines(vec![
+        buffer.assert_eq(&Buffer::with_lines([
             "    ┌──────────────┐",
             "    │Very long name│",
             "    │    Short name│",
@@ -1261,7 +1261,7 @@ mod tests {
         let area = Rect::new(0, 0, 30, 20);
         let mut buffer = Buffer::empty(area);
         chart.render(buffer.area, &mut buffer);
-        buffer.assert_eq(&Buffer::with_lines(vec![
+        buffer.assert_eq(&Buffer::with_lines([
             "┌───┐                         ",
             "│Ds1│                         ",
             "└───┘                         ",
@@ -1292,7 +1292,7 @@ mod tests {
         let area = Rect::new(0, 0, 30, 20);
         let mut buffer = Buffer::empty(area);
         chart.render(buffer.area, &mut buffer);
-        buffer.assert_eq(&Buffer::with_lines(vec![
+        buffer.assert_eq(&Buffer::with_lines([
             "The title overlap a legend.   ",
             "                         ┌───┐",
             "                         │Ds1│",
@@ -1323,7 +1323,7 @@ mod tests {
         let area = Rect::new(0, 0, 10, 10);
         let mut buffer = Buffer::empty(area);
         chart.render(buffer.area, &mut buffer);
-        buffer.assert_eq(&Buffer::with_lines(vec![
+        buffer.assert_eq(&Buffer::with_lines([
             "          ",
             "          ",
             "          ",
@@ -1357,7 +1357,7 @@ mod tests {
             let chart = chart.clone().legend_position(Some(position));
             buffer.reset();
             chart.render(buffer.area, &mut buffer);
-            buffer.assert_eq(&Buffer::with_lines(vec!["┌────┐", "│Data│", "└────┘"]));
+            buffer.assert_eq(&Buffer::with_lines(["┌────┐", "│Data│", "└────┘"]));
         }
     }
 
@@ -1376,7 +1376,7 @@ mod tests {
             .legend_position(Some(LegendPosition::TopLeft));
         buffer.reset();
         chart.render(buffer.area, &mut buffer);
-        buffer.assert_eq(&Buffer::with_lines(vec![
+        buffer.assert_eq(&Buffer::with_lines([
             "┌────┐   ",
             "│Data│   ",
             "└────┘   ",
@@ -1391,7 +1391,7 @@ mod tests {
             .legend_position(Some(LegendPosition::Top));
         buffer.reset();
         chart.render(buffer.area, &mut buffer);
-        buffer.assert_eq(&Buffer::with_lines(vec![
+        buffer.assert_eq(&Buffer::with_lines([
             " ┌────┐  ",
             " │Data│  ",
             " └────┘  ",
@@ -1405,7 +1405,7 @@ mod tests {
             .legend_position(Some(LegendPosition::TopRight));
         buffer.reset();
         chart.render(buffer.area, &mut buffer);
-        buffer.assert_eq(&Buffer::with_lines(vec![
+        buffer.assert_eq(&Buffer::with_lines([
             "   ┌────┐",
             "   │Data│",
             "   └────┘",
@@ -1419,7 +1419,7 @@ mod tests {
             .legend_position(Some(LegendPosition::Left));
         buffer.reset();
         chart.render(buffer.area, &mut buffer);
-        buffer.assert_eq(&Buffer::with_lines(vec![
+        buffer.assert_eq(&Buffer::with_lines([
             "         ",
             "┌────┐   ",
             "│Data│   ",
@@ -1434,7 +1434,7 @@ mod tests {
             .legend_position(Some(LegendPosition::Right));
         buffer.reset();
         chart.render(buffer.area, &mut buffer);
-        buffer.assert_eq(&Buffer::with_lines(vec![
+        buffer.assert_eq(&Buffer::with_lines([
             "         ",
             "   ┌────┐",
             "   │Data│",
@@ -1448,7 +1448,7 @@ mod tests {
             .legend_position(Some(LegendPosition::BottomLeft));
         buffer.reset();
         chart.render(buffer.area, &mut buffer);
-        buffer.assert_eq(&Buffer::with_lines(vec![
+        buffer.assert_eq(&Buffer::with_lines([
             "         ",
             "         ",
             "         ",
@@ -1462,7 +1462,7 @@ mod tests {
             .legend_position(Some(LegendPosition::Bottom));
         buffer.reset();
         chart.render(buffer.area, &mut buffer);
-        buffer.assert_eq(&Buffer::with_lines(vec![
+        buffer.assert_eq(&Buffer::with_lines([
             "         ",
             "         ",
             "         ",
@@ -1476,7 +1476,7 @@ mod tests {
             .legend_position(Some(LegendPosition::BottomRight));
         buffer.reset();
         chart.render(buffer.area, &mut buffer);
-        buffer.assert_eq(&Buffer::with_lines(vec![
+        buffer.assert_eq(&Buffer::with_lines([
             "         ",
             "         ",
             "         ",
@@ -1488,7 +1488,7 @@ mod tests {
         let chart = base_chart.clone().legend_position(None);
         buffer.reset();
         chart.render(buffer.area, &mut buffer);
-        buffer.assert_eq(&Buffer::with_lines(vec![
+        buffer.assert_eq(&Buffer::with_lines([
             "         ",
             "         ",
             "         ",

@@ -449,7 +449,7 @@ fn widgets_chart_can_have_a_legend() {
             );
         })
         .unwrap();
-    let mut expected = Buffer::with_lines(vec![
+    let mut expected = Buffer::with_lines([
         "┌Chart Test────────────────────────────────────────────────┐",
         "│10.0│Y Axis                                    ┌─────────┐│",
         "│    │  ••                                      │Dataset 1││",
@@ -658,7 +658,7 @@ fn widgets_chart_top_line_styling_is_correct() {
         })
         .unwrap();
 
-    let mut expected = Buffer::with_lines(vec![
+    let mut expected = Buffer::with_lines([
         "b│abc••••",
         " │       ",
         " │       ",

@@ -588,27 +588,27 @@ mod tests {
 
         // Zero-width
         buffer.set_stringn(0, 0, "aaa", 0, Style::default());
-        buffer.assert_eq(&Buffer::with_lines(vec!["     "]));
+        buffer.assert_eq(&Buffer::with_lines(["     "]));
 
         buffer.set_string(0, 0, "aaa", Style::default());
-        buffer.assert_eq(&Buffer::with_lines(vec!["aaa  "]));
+        buffer.assert_eq(&Buffer::with_lines(["aaa  "]));
 
         // Width limit:
         buffer.set_stringn(0, 0, "bbbbbbbbbbbbbb", 4, Style::default());
-        buffer.assert_eq(&Buffer::with_lines(vec!["bbbb "]));
+        buffer.assert_eq(&Buffer::with_lines(["bbbb "]));
 
         buffer.set_string(0, 0, "12345", Style::default());
-        buffer.assert_eq(&Buffer::with_lines(vec!["12345"]));
+        buffer.assert_eq(&Buffer::with_lines(["12345"]));
 
         // Width truncation:
         buffer.set_string(0, 0, "123456", Style::default());
-        buffer.assert_eq(&Buffer::with_lines(vec!["12345"]));
+        buffer.assert_eq(&Buffer::with_lines(["12345"]));
 
         // multi-line
         buffer = Buffer::empty(Rect::new(0, 0, 5, 2));
         buffer.set_string(0, 0, "12345", Style::default());
         buffer.set_string(0, 1, "67890", Style::default());
-        buffer.assert_eq(&Buffer::with_lines(vec!["12345", "67890"]));
+        buffer.assert_eq(&Buffer::with_lines(["12345", "67890"]));
     }
 
     #[test]
@@ -619,7 +619,7 @@ mod tests {
         // multi-width overwrite
         buffer.set_string(0, 0, "aaaaa", Style::default());
         buffer.set_string(0, 0, "称号", Style::default());
-        buffer.assert_eq(&Buffer::with_lines(vec!["称号a"]));
+        buffer.assert_eq(&Buffer::with_lines(["称号a"]));
     }
 
     #[test]
@@ -630,12 +630,12 @@ mod tests {
         // Leading grapheme with zero width
         let s = "\u{1}a";
         buffer.set_stringn(0, 0, s, 1, Style::default());
-        buffer.assert_eq(&Buffer::with_lines(vec!["a"]));
+        buffer.assert_eq(&Buffer::with_lines(["a"]));
 
         // Trailing grapheme with zero with
         let s = "a\u{1}";
         buffer.set_stringn(0, 0, s, 1, Style::default());
-        buffer.assert_eq(&Buffer::with_lines(vec!["a"]));
+        buffer.assert_eq(&Buffer::with_lines(["a"]));
     }
 
     #[test]
@@ -643,11 +643,11 @@ mod tests {
         let area = Rect::new(0, 0, 5, 1);
         let mut buffer = Buffer::empty(area);
         buffer.set_string(0, 0, "コン", Style::default());
-        buffer.assert_eq(&Buffer::with_lines(vec!["コン "]));
+        buffer.assert_eq(&Buffer::with_lines(["コン "]));
 
         // Only 1 space left.
         buffer.set_string(0, 0, "コンピ", Style::default());
-        buffer.assert_eq(&Buffer::with_lines(vec!["コン "]));
+        buffer.assert_eq(&Buffer::with_lines(["コン "]));
     }
 
     #[fixture]
@@ -713,9 +713,9 @@ mod tests {
 
     #[test]
     fn set_style() {
-        let mut buffer = Buffer::with_lines(vec!["aaaaa", "bbbbb", "ccccc"]);
+        let mut buffer = Buffer::with_lines(["aaaaa", "bbbbb", "ccccc"]);
         buffer.set_style(Rect::new(0, 1, 5, 1), Style::new().red());
-        buffer.assert_eq(&Buffer::with_lines(vec![
+        buffer.assert_eq(&Buffer::with_lines([
             "aaaaa".into(),
             "bbbbb".red(),
             "ccccc".into(),
@@ -724,9 +724,9 @@ mod tests {
 
     #[test]
     fn set_style_does_not_panic_when_out_of_area() {
-        let mut buffer = Buffer::with_lines(vec!["aaaaa", "bbbbb", "ccccc"]);
+        let mut buffer = Buffer::with_lines(["aaaaa", "bbbbb", "ccccc"]);
         buffer.set_style(Rect::new(0, 1, 10, 3), Style::new().red());
-        buffer.assert_eq(&Buffer::with_lines(vec![
+        buffer.assert_eq(&Buffer::with_lines([
             "aaaaa".into(),
             "bbbbb".red(),
             "ccccc".red(),
@@ -735,8 +735,7 @@ mod tests {
 
     #[test]
     fn with_lines() {
-        let buffer =
-            Buffer::with_lines(vec!["┌────────┐", "│コンピュ│", "│ーa 上で│", "└────────┘"]);
+        let buffer = Buffer::with_lines(["┌────────┐", "│コンピュ│", "│ーa 上で│", "└────────┘"]);
         assert_eq!(buffer.area.x, 0);
         assert_eq!(buffer.area.y, 0);
         assert_eq!(buffer.area.width, 10);
@@ -772,14 +771,14 @@ mod tests {
 
     #[test]
     fn diff_single_width() {
-        let prev = Buffer::with_lines(vec![
+        let prev = Buffer::with_lines([
             "          ",
             "┌Title─┐  ",
             "│      │  ",
             "│      │  ",
             "└──────┘  ",
         ]);
-        let next = Buffer::with_lines(vec![
+        let next = Buffer::with_lines([
             "          ",
             "┌TITLE─┐  ",
             "│      │  ",
@@ -801,11 +800,11 @@ mod tests {
     #[test]
     #[rustfmt::skip]
     fn diff_multi_width() {
-        let prev = Buffer::with_lines(vec![
+        let prev = Buffer::with_lines([
             "┌Title─┐  ",
             "└──────┘  ",
         ]);
-        let next = Buffer::with_lines(vec![
+        let next = Buffer::with_lines([
             "┌称号──┐  ",
             "└──────┘  ",
         ]);
@@ -824,8 +823,8 @@ mod tests {
 
     #[test]
     fn diff_multi_width_offset() {
-        let prev = Buffer::with_lines(vec!["┌称号──┐"]);
-        let next = Buffer::with_lines(vec!["┌─称号─┐"]);
+        let prev = Buffer::with_lines(["┌称号──┐"]);
+        let next = Buffer::with_lines(["┌─称号─┐"]);
 
         let diff = prev.diff(&next);
         assert_eq!(
@@ -836,8 +835,8 @@ mod tests {
 
     #[test]
     fn diff_skip() {
-        let prev = Buffer::with_lines(vec!["123"]);
-        let mut next = Buffer::with_lines(vec!["456"]);
+        let prev = Buffer::with_lines(["123"]);
+        let mut next = Buffer::with_lines(["456"]);
         for i in 1..3 {
             next.content[i].set_skip(true);
         }
@@ -889,7 +888,7 @@ mod tests {
             Cell::default().set_symbol("2"),
         );
         one.merge(&two);
-        one.assert_eq(&Buffer::with_lines(vec!["11", "11", "22", "22"]));
+        one.assert_eq(&Buffer::with_lines(["11", "11", "22", "22"]));
     }
 
     #[test]
@@ -913,7 +912,7 @@ mod tests {
             Cell::default().set_symbol("2"),
         );
         one.merge(&two);
-        one.assert_eq(&Buffer::with_lines(vec!["22  ", "22  ", "  11", "  11"]));
+        one.assert_eq(&Buffer::with_lines(["22  ", "22  ", "  11", "  11"]));
     }
 
     #[test]
@@ -937,7 +936,7 @@ mod tests {
             Cell::default().set_symbol("2"),
         );
         one.merge(&two);
-        let mut merged = Buffer::with_lines(vec!["222 ", "222 ", "2221", "2221"]);
+        let mut merged = Buffer::with_lines(["222 ", "222 ", "2221", "2221"]);
         merged.area = Rect {
             x: 1,
             y: 1,
@@ -1003,6 +1002,6 @@ mod tests {
         let mut buf = Buffer::empty(Rect::new(0, 0, 3, 2));
         buf.set_string(0, 0, "foo", Style::new().red());
         buf.set_string(0, 1, "bar", Style::new().blue());
-        buf.assert_eq(&Buffer::with_lines(vec!["foo".red(), "bar".blue()]));
+        buf.assert_eq(&Buffer::with_lines(["foo".red(), "bar".blue()]));
     }
 }

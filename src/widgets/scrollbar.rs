@@ -680,7 +680,7 @@ mod tests {
         let mut buffer = Buffer::empty(Rect::new(0, 0, expected.width() as u16, 1));
         let mut state = ScrollbarState::new(content_length).position(position);
         scrollbar_no_arrows.render(buffer.area, &mut buffer, &mut state);
-        buffer.assert_eq(&Buffer::with_lines(vec![expected]));
+        buffer.assert_eq(&Buffer::with_lines([expected]));
     }
 
     #[rstest]
@@ -703,7 +703,7 @@ mod tests {
         let mut buffer = Buffer::empty(Rect::new(0, 0, expected.width() as u16, 1));
         let mut state = ScrollbarState::new(content_length).position(position);
         scrollbar_no_arrows.render(buffer.area, &mut buffer, &mut state);
-        buffer.assert_eq(&Buffer::with_lines(vec![expected]));
+        buffer.assert_eq(&Buffer::with_lines([expected]));
     }
 
     #[rstest]
@@ -718,7 +718,7 @@ mod tests {
         let mut buffer = Buffer::empty(Rect::new(0, 0, size as u16, 1));
         let mut state = ScrollbarState::new(content_length).position(position);
         scrollbar_no_arrows.render(buffer.area, &mut buffer, &mut state);
-        buffer.assert_eq(&Buffer::with_lines(vec![expected]));
+        buffer.assert_eq(&Buffer::with_lines([expected]));
     }
 
     #[rstest]
@@ -735,7 +735,7 @@ mod tests {
         let mut buffer = Buffer::empty(Rect::new(0, 0, size as u16, 1));
         let mut state = ScrollbarState::new(content_length).position(position);
         scrollbar_no_arrows.render(buffer.area, &mut buffer, &mut state);
-        buffer.assert_eq(&Buffer::with_lines(vec![expected]));
+        buffer.assert_eq(&Buffer::with_lines([expected]));
     }
 
     #[rstest]
@@ -751,7 +751,7 @@ mod tests {
         let mut buffer = Buffer::empty(Rect::new(0, 0, size as u16, 1));
         let mut state = ScrollbarState::new(content_length).position(position);
         scrollbar_no_arrows.render(buffer.area, &mut buffer, &mut state);
-        buffer.assert_eq(&Buffer::with_lines(vec![expected]));
+        buffer.assert_eq(&Buffer::with_lines([expected]));
     }
 
     #[rstest]
@@ -778,7 +778,7 @@ mod tests {
             .begin_symbol(None)
             .end_symbol(None)
             .render(buffer.area, &mut buffer, &mut state);
-        buffer.assert_eq(&Buffer::with_lines(vec![expected]));
+        buffer.assert_eq(&Buffer::with_lines([expected]));
     }
 
     #[rstest]
@@ -806,7 +806,7 @@ mod tests {
             .begin_symbol(None)
             .end_symbol(None)
             .render(buffer.area, &mut buffer, &mut state);
-        buffer.assert_eq(&Buffer::with_lines(vec![expected]));
+        buffer.assert_eq(&Buffer::with_lines([expected]));
     }
 
     #[rstest]
@@ -837,7 +837,7 @@ mod tests {
             .begin_symbol(None)
             .end_symbol(None)
             .render(buffer.area, &mut buffer, &mut state);
-        buffer.assert_eq(&Buffer::with_lines(vec![expected]));
+        buffer.assert_eq(&Buffer::with_lines([expected]));
     }
 
     #[rstest]
@@ -868,7 +868,7 @@ mod tests {
             .track_symbol(Some("-"))
             .thumb_symbol("#")
             .render(buffer.area, &mut buffer, &mut state);
-        buffer.assert_eq(&Buffer::with_lines(vec![expected]));
+        buffer.assert_eq(&Buffer::with_lines([expected]));
     }
 
     #[rstest]
@@ -896,7 +896,7 @@ mod tests {
             .end_symbol(None)
             .render(buffer.area, &mut buffer, &mut state);
         let empty_string = " ".repeat(size as usize);
-        buffer.assert_eq(&Buffer::with_lines(vec![&empty_string, expected]));
+        buffer.assert_eq(&Buffer::with_lines([&empty_string, expected]));
     }
 
     #[rstest]
@@ -924,7 +924,7 @@ mod tests {
             .end_symbol(None)
             .render(buffer.area, &mut buffer, &mut state);
         let empty_string = " ".repeat(size as usize);
-        buffer.assert_eq(&Buffer::with_lines(vec![expected, &empty_string]));
+        buffer.assert_eq(&Buffer::with_lines([expected, &empty_string]));
     }
 
     #[rstest]
@@ -1011,7 +1011,7 @@ mod tests {
             .position(position)
             .viewport_content_length(2);
         scrollbar_no_arrows.render(buffer.area, &mut buffer, &mut state);
-        buffer.assert_eq(&Buffer::with_lines(vec![expected]));
+        buffer.assert_eq(&Buffer::with_lines([expected]));
     }
 
     /// Fixes <https://github.com/ratatui-org/ratatui/pull/959> which was a bug that would not
@@ -1040,6 +1040,6 @@ mod tests {
             .position(position)
             .viewport_content_length(2);
         scrollbar_no_arrows.render(buffer.area, &mut buffer, &mut state);
-        buffer.assert_eq(&Buffer::with_lines(vec![expected]));
+        buffer.assert_eq(&Buffer::with_lines([expected]));
     }
 }

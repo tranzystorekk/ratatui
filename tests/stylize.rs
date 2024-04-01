@@ -28,7 +28,7 @@ fn barchart_can_be_stylized() {
         })
         .unwrap();
 
-    let mut expected = Buffer::with_lines(vec![
+    let mut expected = Buffer::with_lines([
         "      ██ ",
         "   ▅▅ ██ ",
         "▂▂ ██ ██ ",
@@ -72,12 +72,8 @@ fn block_can_be_stylized() -> io::Result<()> {
         f.render_widget(block, area);
     })?;
 
-    let mut expected = Buffer::with_lines(vec![
-        "┌Title─┐   ",
-        "│      │   ",
-        "└──────┘   ",
-        "           ",
-    ]);
+    let mut expected =
+        Buffer::with_lines(["┌Title─┐   ", "│      │   ", "└──────┘   ", "           "]);
     for x in area.x..area.width {
         for y in area.y..area.height {
             expected
@@ -103,7 +99,7 @@ fn paragraph_can_be_stylized() -> io::Result<()> {
         f.render_widget(paragraph, area);
     })?;
 
-    let mut expected = Buffer::with_lines(vec!["Text      "]);
+    let mut expected = Buffer::with_lines(["Text      "]);
     for x in 0..4 {
         expected.get_mut(x, 0).set_fg(Color::Cyan);
     }

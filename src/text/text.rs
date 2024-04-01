@@ -969,7 +969,7 @@ mod tests {
             let area = Rect::new(0, 0, 5, 1);
             let mut buf = Buffer::empty(area);
             text.render(area, &mut buf);
-            buf.assert_eq(&Buffer::with_lines(vec!["foo  "]));
+            buf.assert_eq(&Buffer::with_lines(["foo  "]));
         }
 
         #[rstest]
@@ -985,7 +985,7 @@ mod tests {
             let area = Rect::new(0, 0, 5, 1);
             let mut buf = Buffer::empty(area);
             text.render(area, &mut buf);
-            buf.assert_eq(&Buffer::with_lines(vec!["  foo"]));
+            buf.assert_eq(&Buffer::with_lines(["  foo"]));
         }
 
         #[test]
@@ -994,7 +994,7 @@ mod tests {
             let area = Rect::new(0, 0, 5, 1);
             let mut buf = Buffer::empty(area);
             text.render(area, &mut buf);
-            buf.assert_eq(&Buffer::with_lines(vec![" foo "]));
+            buf.assert_eq(&Buffer::with_lines([" foo "]));
         }
 
         #[test]
@@ -1003,7 +1003,7 @@ mod tests {
             let area = Rect::new(0, 0, 6, 1);
             let mut buf = Buffer::empty(area);
             text.render(area, &mut buf);
-            buf.assert_eq(&Buffer::with_lines(vec![" foo  "]));
+            buf.assert_eq(&Buffer::with_lines([" foo  "]));
         }
 
         #[test]
@@ -1016,7 +1016,7 @@ mod tests {
             let area = Rect::new(0, 0, 5, 2);
             let mut buf = Buffer::empty(area);
             text.render(area, &mut buf);
-            buf.assert_eq(&Buffer::with_lines(vec!["  foo", " bar "]));
+            buf.assert_eq(&Buffer::with_lines(["  foo", " bar "]));
         }
 
         #[test]
@@ -1025,7 +1025,7 @@ mod tests {
             let mut buf = Buffer::empty(area);
             Text::from("foo".on_blue()).render(area, &mut buf);
 
-            let mut expected = Buffer::with_lines(vec!["foo  "]);
+            let mut expected = Buffer::with_lines(["foo  "]);
             expected.set_style(Rect::new(0, 0, 3, 1), Style::new().bg(Color::Blue));
             buf.assert_eq(&expected);
         }
@@ -1035,7 +1035,7 @@ mod tests {
             let mut buf = Buffer::empty(Rect::new(0, 0, 6, 1));
             Text::from("foobar".on_blue()).render(Rect::new(0, 0, 3, 1), &mut buf);
 
-            let mut expected = Buffer::with_lines(vec!["foo   "]);
+            let mut expected = Buffer::with_lines(["foo   "]);
             expected.set_style(Rect::new(0, 0, 3, 1), Style::new().bg(Color::Blue));
             buf.assert_eq(&expected);
         }

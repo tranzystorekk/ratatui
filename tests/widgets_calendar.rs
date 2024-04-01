@@ -27,7 +27,7 @@ fn days_layout() {
         Date::from_calendar_date(2023, Month::January, 1).unwrap(),
         CalendarEventStore::default(),
     );
-    let expected = Buffer::with_lines(vec![
+    let expected = Buffer::with_lines([
         "  1  2  3  4  5  6  7",
         "  8  9 10 11 12 13 14",
         " 15 16 17 18 19 20 21",
@@ -44,7 +44,7 @@ fn days_layout_show_surrounding() {
         CalendarEventStore::default(),
     )
     .show_surrounding(Style::default());
-    let expected = Buffer::with_lines(vec![
+    let expected = Buffer::with_lines([
         " 26 27 28 29 30  1  2",
         "  3  4  5  6  7  8  9",
         " 10 11 12 13 14 15 16",
@@ -62,7 +62,7 @@ fn show_month_header() {
         CalendarEventStore::default(),
     )
     .show_month_header(Style::default());
-    let expected = Buffer::with_lines(vec![
+    let expected = Buffer::with_lines([
         "    January 2023     ",
         "  1  2  3  4  5  6  7",
         "  8  9 10 11 12 13 14",
@@ -80,7 +80,7 @@ fn show_weekdays_header() {
         CalendarEventStore::default(),
     )
     .show_weekdays_header(Style::default());
-    let expected = Buffer::with_lines(vec![
+    let expected = Buffer::with_lines([
         " Su Mo Tu We Th Fr Sa",
         "  1  2  3  4  5  6  7",
         "  8  9 10 11 12 13 14",
@@ -100,7 +100,7 @@ fn show_combo() {
     .show_weekdays_header(Style::default())
     .show_month_header(Style::default())
     .show_surrounding(Style::default());
-    let expected = Buffer::with_lines(vec![
+    let expected = Buffer::with_lines([
         "    January 2023     ",
         " Su Mo Tu We Th Fr Sa",
         "  1  2  3  4  5  6  7",

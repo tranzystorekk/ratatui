@@ -1029,7 +1029,7 @@ mod tests {
             let block = Block::new().borders(Borders::ALL).title("Block");
             let table = Table::new(rows, vec![Constraint::Length(5); 2]).block(block);
             Widget::render(table, Rect::new(0, 0, 15, 3), &mut buf);
-            buf.assert_eq(&Buffer::with_lines(vec![
+            buf.assert_eq(&Buffer::with_lines([
                 "┌Block────────┐",
                 "│Cell1 Cell2  │",
                 "└─────────────┘",
@@ -1046,7 +1046,7 @@ mod tests {
             ];
             let table = Table::new(rows, [Constraint::Length(5); 2]).header(header);
             Widget::render(table, Rect::new(0, 0, 15, 3), &mut buf);
-            buf.assert_eq(&Buffer::with_lines(vec![
+            buf.assert_eq(&Buffer::with_lines([
                 "Head1 Head2    ",
                 "Cell1 Cell2    ",
                 "Cell3 Cell4    ",
@@ -1063,7 +1063,7 @@ mod tests {
             ];
             let table = Table::new(rows, [Constraint::Length(5); 2]).footer(footer);
             Widget::render(table, Rect::new(0, 0, 15, 3), &mut buf);
-            buf.assert_eq(&Buffer::with_lines(vec![
+            buf.assert_eq(&Buffer::with_lines([
                 "Cell1 Cell2    ",
                 "Cell3 Cell4    ",
                 "Foot1 Foot2    ",
@@ -1080,7 +1080,7 @@ mod tests {
                 .header(header)
                 .footer(footer);
             Widget::render(table, Rect::new(0, 0, 15, 3), &mut buf);
-            buf.assert_eq(&Buffer::with_lines(vec![
+            buf.assert_eq(&Buffer::with_lines([
                 "Head1 Head2    ",
                 "Cell1 Cell2    ",
                 "Foot1 Foot2    ",
@@ -1097,7 +1097,7 @@ mod tests {
             ];
             let table = Table::new(rows, [Constraint::Length(5); 2]).header(header);
             Widget::render(table, Rect::new(0, 0, 15, 3), &mut buf);
-            buf.assert_eq(&Buffer::with_lines(vec![
+            buf.assert_eq(&Buffer::with_lines([
                 "Head1 Head2    ",
                 "               ",
                 "Cell1 Cell2    ",
@@ -1111,7 +1111,7 @@ mod tests {
             let rows = vec![Row::new(vec!["Cell1", "Cell2"])];
             let table = Table::new(rows, [Constraint::Length(5); 2]).footer(footer);
             Widget::render(table, Rect::new(0, 0, 15, 3), &mut buf);
-            buf.assert_eq(&Buffer::with_lines(vec![
+            buf.assert_eq(&Buffer::with_lines([
                 "Cell1 Cell2    ",
                 "               ",
                 "Foot1 Foot2    ",
@@ -1127,7 +1127,7 @@ mod tests {
             ];
             let table = Table::new(rows, [Constraint::Length(5); 2]);
             Widget::render(table, Rect::new(0, 0, 15, 3), &mut buf);
-            buf.assert_eq(&Buffer::with_lines(vec![
+            buf.assert_eq(&Buffer::with_lines([
                 "Cell1 Cell2    ",
                 "               ",
                 "Cell3 Cell4    ",
@@ -1144,7 +1144,7 @@ mod tests {
             ];
             let table = Table::new(rows, [Percentage(100)]);
             Widget::render(table, Rect::new(0, 0, 15, 3), &mut buf);
-            buf.assert_eq(&Buffer::with_lines(vec![
+            buf.assert_eq(&Buffer::with_lines([
                 "Left           ",
                 "    Center     ",
                 "          Right",
@@ -1172,7 +1172,7 @@ mod tests {
                 .highlight_symbol(">>");
             let mut state = TableState::new().with_selected(0);
             StatefulWidget::render(table, Rect::new(0, 0, 15, 3), &mut buf, &mut state);
-            buf.assert_eq(&Buffer::with_lines(vec![
+            buf.assert_eq(&Buffer::with_lines([
                 ">>Cell1 Cell2  ".red(),
                 "  Cell3 Cell4  ".into(),
                 "               ".into(),
@@ -1403,7 +1403,7 @@ mod tests {
                 0,    // spacing
                 None, // selection
             )
-            .assert_eq(&Buffer::with_lines(vec![
+            .assert_eq(&Buffer::with_lines([
                 "ABCDE  12345   ", /* default layout is Flex::Start but columns length
                                     * constraints are calculated as `max_area / n_columns`,
                                     * i.e. they are distributed amongst available space */
@@ -1418,7 +1418,7 @@ mod tests {
             let area = Rect::new(0, 0, 15, 3);
             let mut buf = Buffer::empty(area);
             Widget::render(table, area, &mut buf);
-            buf.assert_eq(&Buffer::with_lines(vec![
+            buf.assert_eq(&Buffer::with_lines([
                 "ABCDE12345     ", /* As reference, this is what happens when you manually
                                     * specify widths */
                 "               ", // row 2
@@ -1432,7 +1432,7 @@ mod tests {
                 0,       // spacing
                 Some(0), // selection
             )
-            .assert_eq(&Buffer::with_lines(vec![
+            .assert_eq(&Buffer::with_lines([
                 "ABCDE  12345   ", // row 1
                 "               ", // row 2
                 "               ", // row 3
@@ -1445,7 +1445,7 @@ mod tests {
                 0,    // spacing
                 None, // selection
             )
-            .assert_eq(&Buffer::with_lines(vec![
+            .assert_eq(&Buffer::with_lines([
                 "ABCDE  12345   ", // row 1
                 "               ", // row 2
                 "               ", // row 3
@@ -1457,7 +1457,7 @@ mod tests {
                 0,       // spacing
                 Some(0), // selection
             )
-            .assert_eq(&Buffer::with_lines(vec![
+            .assert_eq(&Buffer::with_lines([
                 ">>>ABCDE 12345 ", // row 1
                 "               ", // row 2
                 "               ", // row 3
@@ -1470,7 +1470,7 @@ mod tests {
                 0,    // spacing
                 None, // selection
             )
-            .assert_eq(&Buffer::with_lines(vec![
+            .assert_eq(&Buffer::with_lines([
                 "   ABCDE 12345 ", // row 1
                 "               ", // row 2
                 "               ", // row 3
@@ -1483,7 +1483,7 @@ mod tests {
                 0,       // spacing
                 Some(0), // selection
             )
-            .assert_eq(&Buffer::with_lines(vec![
+            .assert_eq(&Buffer::with_lines([
                 ">>>ABCDE 12345 ", // row 1
                 "               ", // row 2
                 "               ", // row 3
@@ -1500,7 +1500,7 @@ mod tests {
                 1,    // spacing
                 None, // selection
             )
-            .assert_eq(&Buffer::with_lines(vec![
+            .assert_eq(&Buffer::with_lines([
                 "ABCDE 1234", // spacing is prioritized and column is cut
                 "          ", // row 2
                 "          ", // row 3
@@ -1511,7 +1511,7 @@ mod tests {
                 1,    // spacing
                 None, // selection
             )
-            .assert_eq(&Buffer::with_lines(vec![
+            .assert_eq(&Buffer::with_lines([
                 "ABCDE 1234", // spacing is prioritized and column is cut
                 "          ", // row 2
                 "          ", // row 3
@@ -1531,7 +1531,7 @@ mod tests {
                 1,    // spacing
                 None, // selection
             )
-            .assert_eq(&Buffer::with_lines(vec![
+            .assert_eq(&Buffer::with_lines([
                 "   ABC 123", // highlight_symbol and spacing are prioritized
                 "          ", // row 2
                 "          ", // row 3
@@ -1544,7 +1544,7 @@ mod tests {
                 1,    // spacing
                 None, // selection
             )
-            .assert_eq(&Buffer::with_lines(vec![
+            .assert_eq(&Buffer::with_lines([
                 "   ABC 12", // highlight_symbol and spacing are prioritized
                 "         ", // row 2
                 "         ", // row 3
@@ -1555,7 +1555,7 @@ mod tests {
                 1,    // spacing
                 None, // selection
             )
-            .assert_eq(&Buffer::with_lines(vec![
+            .assert_eq(&Buffer::with_lines([
                 "   AB 12", // highlight_symbol and spacing are prioritized
                 "        ", // row 2
                 "        ", // row 3
@@ -1566,7 +1566,7 @@ mod tests {
                 1,    // spacing
                 None, // selection
             )
-            .assert_eq(&Buffer::with_lines(vec![
+            .assert_eq(&Buffer::with_lines([
                 "   AB 1", // highlight_symbol and spacing are prioritized
                 "       ", // row 2
                 "       ", // row 3
@@ -1582,7 +1582,7 @@ mod tests {
             let mut buf = Buffer::empty(area);
             Widget::render(table, area, &mut buf);
             // highlight_symbol and spacing are prioritized but columns are evenly distributed
-            buf.assert_eq(&Buffer::with_lines(vec![
+            buf.assert_eq(&Buffer::with_lines([
                 "   ABCDE 1",
                 "          ",
                 "          ",
@@ -1598,7 +1598,7 @@ mod tests {
             let mut buf = Buffer::empty(area);
             Widget::render(table, area, &mut buf);
             // highlight_symbol and spacing are prioritized but columns are evenly distributed
-            buf.assert_eq(&Buffer::with_lines(vec![
+            buf.assert_eq(&Buffer::with_lines([
                 "   ABC 123",
                 "          ",
                 "          ",
@@ -1610,7 +1610,7 @@ mod tests {
                 1,       // spacing
                 Some(0), // selection
             )
-            .assert_eq(&Buffer::with_lines(vec![
+            .assert_eq(&Buffer::with_lines([
                 "ABCDE 1234", // spacing is prioritized
                 "          ",
                 "          ",
@@ -1622,7 +1622,7 @@ mod tests {
                 1,       // spacing
                 Some(0), // selection
             )
-            .assert_eq(&Buffer::with_lines(vec![
+            .assert_eq(&Buffer::with_lines([
                 ">>>ABC 123", // row 1
                 "          ", // row 2
                 "          ", // row 3
@@ -1634,7 +1634,7 @@ mod tests {
                 1,       // spacing
                 Some(0), // selection
             )
-            .assert_eq(&Buffer::with_lines(vec![
+            .assert_eq(&Buffer::with_lines([
                 ">>>ABC 123", // highlight column and spacing are prioritized
                 "          ", // row 2
                 "          ", // row 3
@@ -1649,7 +1649,7 @@ mod tests {
                 0,    // spacing
                 None, // selection
             )
-            .assert_eq(&Buffer::with_lines(vec![
+            .assert_eq(&Buffer::with_lines([
                 "ABCDE12345", // row 1
                 "          ", // row 2
                 "          ", // row 3
@@ -1660,7 +1660,7 @@ mod tests {
                 0,    // spacing
                 None, // selection
             )
-            .assert_eq(&Buffer::with_lines(vec![
+            .assert_eq(&Buffer::with_lines([
                 "ABCDE12345", // row 1
                 "          ", // row 2
                 "          ", // row 3
@@ -1675,7 +1675,7 @@ mod tests {
                 0,    // spacing
                 None, // selection
             )
-            .assert_eq(&Buffer::with_lines(vec![
+            .assert_eq(&Buffer::with_lines([
                 "   ABCD123", // highlight column and spacing are prioritized
                 "          ", // row 2
                 "          ", // row 3
@@ -1686,7 +1686,7 @@ mod tests {
                 0,       // spacing
                 Some(0), // selection
             )
-            .assert_eq(&Buffer::with_lines(vec![
+            .assert_eq(&Buffer::with_lines([
                 "ABCDE12345", // row 1
                 "          ", // row 2
                 "          ", // row 3
@@ -1697,7 +1697,7 @@ mod tests {
                 0,       // spacing
                 Some(0), // selection
             )
-            .assert_eq(&Buffer::with_lines(vec![
+            .assert_eq(&Buffer::with_lines([
                 ">>>ABCD123", // highlight column and spacing are prioritized
                 "          ", // row 2
                 "          ", // row 3
@@ -1708,7 +1708,7 @@ mod tests {
                 0,       // spacing
                 Some(0), // selection
             )
-            .assert_eq(&Buffer::with_lines(vec![
+            .assert_eq(&Buffer::with_lines([
                 ">>>ABCD123", // highlight column and spacing are prioritized
                 "          ", // row 2
                 "          ", // row 3

@@ -101,7 +101,7 @@ mod tests {
                 context.draw(&Map::default());
             });
         canvas.render(buffer.area, &mut buffer);
-        buffer.assert_eq(&Buffer::with_lines(vec![
+        buffer.assert_eq(&Buffer::with_lines([
             "                                                                                ",
             "                   ••••••• •• •• •• •                                           ",
             "            ••••••••••••••       •••      ••••  •••  ••    ••••                 ",
@@ -159,7 +159,7 @@ mod tests {
                 });
             });
         canvas.render(buffer.area, &mut buffer);
-        buffer.assert_eq(&Buffer::with_lines(vec![
+        buffer.assert_eq(&Buffer::with_lines([
             "                                                                                ",
             "                  ⢀⣠⠤⠤⠤⠔⢤⣤⡄⠤⡠⣄⠢⠂⢢⠰⣠⡄⣀⡀                      ⣀                   ",
             "            ⢀⣀⡤⣦⠲⢶⣿⣮⣿⡉⣰⢶⢏⡂        ⢀⣟⠁     ⢺⣻⢿⠏   ⠈⠉⠁ ⢀⣀    ⠈⠓⢳⣢⣂⡀               ",

@@ -85,7 +85,7 @@ mod tests {
                 });
             });
         canvas.render(buffer.area, &mut buffer);
-        let mut expected = Buffer::with_lines(vec![
+        let mut expected = Buffer::with_lines([
             "██████████",
             "█        █",
             "█        █",
@@ -119,7 +119,7 @@ mod tests {
                 });
             });
         canvas.render(buffer.area, &mut buffer);
-        let mut expected = Buffer::with_lines(vec![
+        let mut expected = Buffer::with_lines([
             "█▀▀▀▀▀▀▀▀█",
             "█        █",
             "█        █",
@@ -163,7 +163,7 @@ mod tests {
                 });
             });
         canvas.render(buffer.area, &mut buffer);
-        let mut expected = Buffer::with_lines(vec![
+        let mut expected = Buffer::with_lines([
             "⡏⠉⠉⠉⠉⠉⠉⠉⠉⢹",
             "⡇⢠⠤⠤⠤⠤⠤⠤⡄⢸",
             "⡇⢸      ⡇⢸",

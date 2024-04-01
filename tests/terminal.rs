@@ -104,16 +104,13 @@ fn terminal_insert_before_moves_viewport() -> Result<(), Box<dyn Error>> {
         f.render_widget(paragraph, f.size());
     })?;
 
-    terminal
-        .backend()
-        .buffer()
-        .assert_eq(&Buffer::with_lines(vec![
-            "------ Line 1 ------",
-            "------ Line 2 ------",
-            "[---- Viewport ----]",
-            "                    ",
-            "                    ",
-        ]));
+    terminal.backend().buffer().assert_eq(&Buffer::with_lines([
+        "------ Line 1 ------",
+        "------ Line 2 ------",
+        "[---- Viewport ----]",
+        "                    ",
+        "                    ",
+    ]));
 
     Ok(())
 }
@@ -149,16 +146,13 @@ fn terminal_insert_before_scrolls_on_large_input() -> Result<(), Box<dyn Error>>
         f.render_widget(paragraph, f.size());
     })?;
 
-    terminal
-        .backend()
-        .buffer()
-        .assert_eq(&Buffer::with_lines(vec![
-            "------ Line 2 ------",
-            "------ Line 3 ------",
-            "------ Line 4 ------",
-            "------ Line 5 ------",
-            "[---- Viewport ----]",
-        ]));
+    terminal.backend().buffer().assert_eq(&Buffer::with_lines([
+        "------ Line 2 ------",
+        "------ Line 3 ------",
+        "------ Line 4 ------",
+        "------ Line 5 ------",
+        "[---- Viewport ----]",
+    ]));
 
     Ok(())
 }
@@ -204,16 +198,13 @@ fn terminal_insert_before_scrolls_on_many_inserts() -> Result<(), Box<dyn Error>
         f.render_widget(paragraph, f.size());
     })?;
 
-    terminal
-        .backend()
-        .buffer()
-        .assert_eq(&Buffer::with_lines(vec![
-            "------ Line 2 ------",
-            "------ Line 3 ------",
-            "------ Line 4 ------",
-            "------ Line 5 ------",
-            "[---- Viewport ----]",
-        ]));
+    terminal.backend().buffer().assert_eq(&Buffer::with_lines([
+        "------ Line 2 ------",
+        "------ Line 3 ------",
+        "------ Line 4 ------",
+        "------ Line 5 ------",
+        "[---- Viewport ----]",
+    ]));
 
     Ok(())
 }

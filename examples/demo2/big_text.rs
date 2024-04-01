@@ -306,7 +306,7 @@ mod tests {
             .build()?;
         let mut buf = Buffer::empty(Rect::new(0, 0, 80, 8));
         big_text.render(buf.area, &mut buf);
-        buf.assert_eq(&Buffer::with_lines(vec![
+        buf.assert_eq(&Buffer::with_lines([
             " ████     ██                     ███            ████      ██                    ",
             "██  ██                            ██             ██                             ",
             "███      ███    █████    ███ ██   ██     ████    ██      ███    █████    ████   ",
@@ -326,7 +326,7 @@ mod tests {
             .build()?;
         let mut buf = Buffer::empty(Rect::new(0, 0, 70, 6));
         big_text.render(buf.area, &mut buf);
-        buf.assert_eq(&Buffer::with_lines(vec![
+        buf.assert_eq(&Buffer::with_lines([
             "██████                                             █               ███",
             "█ ██ █                                            ██                ██",
             "  ██    ██ ███  ██  ██  █████    ████    ████    █████   ████       ██",
@@ -344,7 +344,7 @@ mod tests {
             .build()?;
         let mut buf = Buffer::empty(Rect::new(0, 0, 40, 16));
         big_text.render(buf.area, &mut buf);
-        buf.assert_eq(&Buffer::with_lines(vec![
+        buf.assert_eq(&Buffer::with_lines([
             "██   ██          ███       █      ██    ",
             "███ ███           ██      ██            ",
             "███████ ██  ██    ██     █████   ███    ",
@@ -373,7 +373,7 @@ mod tests {
             .build()?;
         let mut buf = Buffer::empty(Rect::new(0, 0, 48, 8));
         big_text.render(buf.area, &mut buf);
-        buf.assert_eq(&Buffer::with_lines(vec![
+        buf.assert_eq(&Buffer::with_lines([
             " ████      █             ███               ███  ".bold(),
             "██  ██    ██              ██                ██  ".bold(),
             "███      █████  ██  ██    ██     ████       ██  ".bold(),
@@ -397,7 +397,7 @@ mod tests {
             .build()?;
         let mut buf = Buffer::empty(Rect::new(0, 0, 40, 24));
         big_text.render(buf.area, &mut buf);
-        let mut expected = Buffer::with_lines(vec![
+        let mut expected = Buffer::with_lines([
             "██████             ███                  ",
             " ██  ██             ██                  ",
             " ██  ██  ████       ██                  ",
@@ -438,7 +438,7 @@ mod tests {
             .build()?;
         let mut buf = Buffer::empty(Rect::new(0, 0, 80, 4));
         big_text.render(buf.area, &mut buf);
-        buf.assert_eq(&Buffer::with_lines(vec![
+        buf.assert_eq(&Buffer::with_lines([
             "▄█▀▀█▄    ▀▀                     ▀██            ▀██▀      ▀▀                    ",
             "▀██▄     ▀██    ██▀▀█▄  ▄█▀▀▄█▀   ██    ▄█▀▀█▄   ██      ▀██    ██▀▀█▄  ▄█▀▀█▄  ",
             "▄▄ ▀██    ██    ██  ██  ▀█▄▄██    ██    ██▀▀▀▀   ██  ▄█   ██    ██  ██  ██▀▀▀▀  ",
@@ -455,7 +455,7 @@ mod tests {
             .build()?;
         let mut buf = Buffer::empty(Rect::new(0, 0, 70, 3));
         big_text.render(buf.area, &mut buf);
-        buf.assert_eq(&Buffer::with_lines(vec![
+        buf.assert_eq(&Buffer::with_lines([
             "█▀██▀█                                            ▄█               ▀██",
             "  ██    ▀█▄█▀█▄ ██  ██  ██▀▀█▄  ▄█▀▀█▄   ▀▀▀█▄   ▀██▀▀  ▄█▀▀█▄   ▄▄▄██",
             "  ██     ██  ▀▀ ██  ██  ██  ██  ██  ▄▄  ▄█▀▀██    ██ ▄  ██▀▀▀▀  ██  ██",
@@ -471,7 +471,7 @@ mod tests {
             .build()?;
         let mut buf = Buffer::empty(Rect::new(0, 0, 40, 8));
         big_text.render(buf.area, &mut buf);
-        buf.assert_eq(&Buffer::with_lines(vec![
+        buf.assert_eq(&Buffer::with_lines([
             "██▄ ▄██          ▀██      ▄█      ▀▀    ",
             "███████ ██  ██    ██     ▀██▀▀   ▀██    ",
             "██ ▀ ██ ██  ██    ██      ██ ▄    ██    ",
@@ -493,7 +493,7 @@ mod tests {
             .build()?;
         let mut buf = Buffer::empty(Rect::new(0, 0, 48, 4));
         big_text.render(buf.area, &mut buf);
-        buf.assert_eq(&Buffer::with_lines(vec![
+        buf.assert_eq(&Buffer::with_lines([
             "▄█▀▀█▄    ▄█             ▀██               ▀██  ".bold(),
             "▀██▄     ▀██▀▀  ██  ██    ██    ▄█▀▀█▄   ▄▄▄██  ".bold(),
             "▄▄ ▀██    ██ ▄  ▀█▄▄██    ██    ██▀▀▀▀  ██  ██  ".bold(),
@@ -514,7 +514,7 @@ mod tests {
             .build()?;
         let mut buf = Buffer::empty(Rect::new(0, 0, 40, 12));
         big_text.render(buf.area, &mut buf);
-        let mut expected = Buffer::with_lines(vec![
+        let mut expected = Buffer::with_lines([
             "▀██▀▀█▄            ▀██                  ",
             " ██▄▄█▀ ▄█▀▀█▄   ▄▄▄██                  ",
             " ██ ▀█▄ ██▀▀▀▀  ██  ██                  ",
@@ -543,7 +543,7 @@ mod tests {
             .build()?;
         let mut buf = Buffer::empty(Rect::new(0, 0, 40, 8));
         big_text.render(buf.area, &mut buf);
-        buf.assert_eq(&Buffer::with_lines(vec![
+        buf.assert_eq(&Buffer::with_lines([
             "▐█▌  █          ▐█      ██   █          ",
             "█ █              █      ▐▌              ",
             "█▌  ▐█  ██▌ ▐█▐▌ █  ▐█▌ ▐▌  ▐█  ██▌ ▐█▌ ",
@@ -564,7 +564,7 @@ mod tests {
             .build()?;
         let mut buf = Buffer::empty(Rect::new(0, 0, 35, 6));
         big_text.render(buf.area, &mut buf);
-        buf.assert_eq(&Buffer::with_lines(vec![
+        buf.assert_eq(&Buffer::with_lines([
             "███                      ▐       ▐█",
             "▌█▐                      █        █",
             " █  █▐█ █ █ ██▌ ▐█▌ ▐█▌ ▐██ ▐█▌   █",
@@ -583,7 +583,7 @@ mod tests {
             .build()?;
         let mut buf = Buffer::empty(Rect::new(0, 0, 20, 16));
         big_text.render(buf.area, &mut buf);
-        buf.assert_eq(&Buffer::with_lines(vec![
+        buf.assert_eq(&Buffer::with_lines([
             "█ ▐▌    ▐█   ▐   █  ",
             "█▌█▌     █   █      ",
             "███▌█ █  █  ▐██ ▐█  ",
@@ -613,7 +613,7 @@ mod tests {
             .build()?;
         let mut buf = Buffer::empty(Rect::new(0, 0, 24, 8));
         big_text.render(buf.area, &mut buf);
-        buf.assert_eq(&Buffer::with_lines(vec![
+        buf.assert_eq(&Buffer::with_lines([
             "▐█▌  ▐      ▐█       ▐█ ".bold(),
             "█ █  █       █        █ ".bold(),
             "█▌  ▐██ █ █  █  ▐█▌   █ ".bold(),
@@ -638,7 +638,7 @@ mod tests {
             .build()?;
         let mut buf = Buffer::empty(Rect::new(0, 0, 20, 24));
         big_text.render(buf.area, &mut buf);
-        let mut expected = Buffer::with_lines(vec![
+        let mut expected = Buffer::with_lines([
             "███      ▐█         ",
             "▐▌▐▌      █         ",
             "▐▌▐▌▐█▌   █         ",
@@ -700,7 +700,7 @@ mod tests {
             .build()?;
         let mut buf = Buffer::empty(Rect::new(0, 0, 40, 4));
         big_text.render(buf.area, &mut buf);
-        buf.assert_eq(&Buffer::with_lines(vec![
+        buf.assert_eq(&Buffer::with_lines([
             "▟▀▙  ▀          ▝█      ▜▛   ▀          ",
             "▜▙  ▝█  █▀▙ ▟▀▟▘ █  ▟▀▙ ▐▌  ▝█  █▀▙ ▟▀▙ ",
             "▄▝█  █  █ █ ▜▄█  █  █▀▀ ▐▌▗▌ █  █ █ █▀▀ ",
@@ -717,7 +717,7 @@ mod tests {
             .build()?;
         let mut buf = Buffer::empty(Rect::new(0, 0, 35, 3));
         big_text.render(buf.area, &mut buf);
-        buf.assert_eq(&Buffer::with_lines(vec![
+        buf.assert_eq(&Buffer::with_lines([
             "▛█▜                      ▟       ▝█",
             " █  ▜▟▜▖█ █ █▀▙ ▟▀▙ ▝▀▙ ▝█▀ ▟▀▙ ▗▄█",
             " █  ▐▌▝▘█ █ █ █ █ ▄ ▟▀█  █▗ █▀▀ █ █",
@@ -733,7 +733,7 @@ mod tests {
             .build()?;
         let mut buf = Buffer::empty(Rect::new(0, 0, 20, 8));
         big_text.render(buf.area, &mut buf);
-        buf.assert_eq(&Buffer::with_lines(vec![
+        buf.assert_eq(&Buffer::with_lines([
             "█▖▟▌    ▝█   ▟   ▀  ",
             "███▌█ █  █  ▝█▀ ▝█  ",
             "█▝▐▌█ █  █   █▗  █  ",
@@ -755,7 +755,7 @@ mod tests {
             .build()?;
         let mut buf = Buffer::empty(Rect::new(0, 0, 24, 4));
         big_text.render(buf.area, &mut buf);
-        buf.assert_eq(&Buffer::with_lines(vec![
+        buf.assert_eq(&Buffer::with_lines([
             "▟▀▙  ▟      ▝█       ▝█ ".bold(),
             "▜▙  ▝█▀ █ █  █  ▟▀▙ ▗▄█ ".bold(),
             "▄▝█  █▗ ▜▄█  █  █▀▀ █ █ ".bold(),
@@ -776,7 +776,7 @@ mod tests {
             .build()?;
         let mut buf = Buffer::empty(Rect::new(0, 0, 20, 12));
         big_text.render(buf.area, &mut buf);
-        let mut expected = Buffer::with_lines(vec![
+        let mut expected = Buffer::with_lines([
             "▜▛▜▖     ▝█         ",
             "▐▙▟▘▟▀▙ ▗▄█         ",
             "▐▌▜▖█▀▀ █ █         ",

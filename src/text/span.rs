@@ -572,7 +572,7 @@ mod tests {
             let span = Span::styled("test content", style);
             let mut buf = Buffer::empty(Rect::new(0, 0, 15, 1));
             span.render(buf.area, &mut buf);
-            buf.assert_eq(&Buffer::with_lines(vec![Line::from(vec![
+            buf.assert_eq(&Buffer::with_lines([Line::from(vec![
                 "test content".green().on_yellow(),
                 "   ".into(),
             ])]));
@@ -610,7 +610,7 @@ mod tests {
             let mut buf = Buffer::empty(Rect::new(0, 0, 15, 1));
             buf.set_style(buf.area, Style::new().italic());
             span.render(buf.area, &mut buf);
-            buf.assert_eq(&Buffer::with_lines(vec![Line::from(vec![
+            buf.assert_eq(&Buffer::with_lines([Line::from(vec![
                 "test content".green().on_yellow().italic(),
                 "   ".italic(),
             ])]));
@@ -640,7 +640,7 @@ mod tests {
             let mut buf = Buffer::empty(Rect::new(0, 0, 6, 1));
             span.render(buf.area, &mut buf);
 
-            buf.assert_eq(&Buffer::with_lines(vec![Line::from(vec![
+            buf.assert_eq(&Buffer::with_lines([Line::from(vec![
                 "test ".green().on_yellow(),
                 " ".into(),
             ])]));
@@ -655,7 +655,7 @@ mod tests {
             let mut buf = Buffer::empty(Rect::new(0, 0, 15, 1));
             span.render(Rect::new(10, 0, 20, 1), &mut buf);
 
-            buf.assert_eq(&Buffer::with_lines(vec![Line::from(vec![
+            buf.assert_eq(&Buffer::with_lines([Line::from(vec![
                 "          ".into(),
                 "test ".green().on_yellow(),
             ])]));

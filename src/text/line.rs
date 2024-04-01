@@ -892,7 +892,7 @@ mod tests {
         Line::from("Hello world")
             .left_aligned()
             .render(buf.area, &mut buf);
-        buf.assert_eq(&Buffer::with_lines(vec!["Hello"]));
+        buf.assert_eq(&Buffer::with_lines(["Hello"]));
     }
 
     #[test]
@@ -901,7 +901,7 @@ mod tests {
         Line::from("Hello world")
             .right_aligned()
             .render(buf.area, &mut buf);
-        buf.assert_eq(&Buffer::with_lines(vec!["world"]));
+        buf.assert_eq(&Buffer::with_lines(["world"]));
     }
 
     #[test]
@@ -910,7 +910,7 @@ mod tests {
         Line::from("Hello world")
             .centered()
             .render(buf.area, &mut buf);
-        buf.assert_eq(&Buffer::with_lines(vec!["lo wo"]));
+        buf.assert_eq(&Buffer::with_lines(["lo wo"]));
     }
 
     #[test]
@@ -979,7 +979,7 @@ mod tests {
         fn render() {
             let mut buf = Buffer::empty(Rect::new(0, 0, 15, 1));
             hello_world().render(Rect::new(0, 0, 15, 1), &mut buf);
-            let mut expected = Buffer::with_lines(vec!["Hello world!   "]);
+            let mut expected = Buffer::with_lines(["Hello world!   "]);
             expected.set_style(Rect::new(0, 0, 15, 1), ITALIC);
             expected.set_style(Rect::new(0, 0, 6, 1), BLUE);
             expected.set_style(Rect::new(6, 0, 6, 1), GREEN);
@@ -997,7 +997,7 @@ mod tests {
         fn render_only_styles_line_area() {
             let mut buf = Buffer::empty(Rect::new(0, 0, 20, 1));
             hello_world().render(Rect::new(0, 0, 15, 1), &mut buf);
-            let mut expected = Buffer::with_lines(vec!["Hello world!        "]);
+            let mut expected = Buffer::with_lines(["Hello world!        "]);
             expected.set_style(Rect::new(0, 0, 15, 1), ITALIC);
             expected.set_style(Rect::new(0, 0, 6, 1), BLUE);
             expected.set_style(Rect::new(6, 0, 6, 1), GREEN);
@@ -1008,7 +1008,7 @@ mod tests {
         fn render_truncates() {
             let mut buf = Buffer::empty(Rect::new(0, 0, 10, 1));
             Line::from("Hello world!").render(Rect::new(0, 0, 5, 1), &mut buf);
-            buf.assert_eq(&Buffer::with_lines(vec!["Hello     "]));
+            buf.assert_eq(&Buffer::with_lines(["Hello     "]));
         }
 
         #[test]
@@ -1016,7 +1016,7 @@ mod tests {
             let line = hello_world().alignment(Alignment::Center);
             let mut buf = Buffer::empty(Rect::new(0, 0, 15, 1));
             line.render(Rect::new(0, 0, 15, 1), &mut buf);
-            let mut expected = Buffer::with_lines(vec![" Hello world!  "]);
+            let mut expected = Buffer::with_lines([" Hello world!  "]);
             expected.set_style(Rect::new(0, 0, 15, 1), ITALIC);
             expected.set_style(Rect::new(1, 0, 6, 1), BLUE);
             expected.set_style(Rect::new(7, 0, 6, 1), GREEN);
@@ -1028,7 +1028,7 @@ mod tests {
             let line = hello_world().alignment(Alignment::Right);
             let mut buf = Buffer::empty(Rect::new(0, 0, 15, 1));
             line.render(Rect::new(0, 0, 15, 1), &mut buf);
-            let mut expected = Buffer::with_lines(vec!["   Hello world!"]);
+            let mut expected = Buffer::with_lines(["   Hello world!"]);
             expected.set_style(Rect::new(0, 0, 15, 1), ITALIC);
             expected.set_style(Rect::new(3, 0, 6, 1), BLUE);
             expected.set_style(Rect::new(9, 0, 6, 1), GREEN);

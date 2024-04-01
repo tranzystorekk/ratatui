@@ -45,7 +45,7 @@ fn widgets_list_should_highlight_the_selected_item() {
             f.render_stateful_widget(list, size, &mut state);
         })
         .unwrap();
-    let mut expected = Buffer::with_lines(vec!["   Item 1 ", ">> Item 2 ", "   Item 3 "]);
+    let mut expected = Buffer::with_lines(["   Item 1 ", ">> Item 2 ", "   Item 3 "]);
     for x in 0..10 {
         expected.get_mut(x, 1).set_bg(Color::Yellow);
     }
@@ -76,7 +76,7 @@ fn widgets_list_should_highlight_the_selected_item_wide_symbol() {
         })
         .unwrap();
 
-    let mut expected = Buffer::with_lines(vec!["   Item 1 ", "▶  Item 2 ", "   Item 3 "]);
+    let mut expected = Buffer::with_lines(["   Item 1 ", "▶  Item 2 ", "   Item 3 "]);
     for x in 0..10 {
         expected.get_mut(x, 1).set_bg(Color::Yellow);
     }
@@ -102,7 +102,7 @@ fn widgets_list_should_truncate_items() {
                 ListItem::new("A very long line"),
                 ListItem::new("A very long line"),
             ],
-            expected: Buffer::with_lines(vec![
+            expected: Buffer::with_lines([
                 format!(">> A ve{}  ", symbols::line::VERTICAL),
                 format!("   A ve{}  ", symbols::line::VERTICAL),
             ]),
@@ -114,7 +114,7 @@ fn widgets_list_should_truncate_items() {
                 ListItem::new("A very long line"),
                 ListItem::new("A very long line"),
             ],
-            expected: Buffer::with_lines(vec![
+            expected: Buffer::with_lines([
                 format!("A very {}  ", symbols::line::VERTICAL),
                 format!("A very {}  ", symbols::line::VERTICAL),
             ]),
@@ -158,15 +158,12 @@ fn widgets_list_should_clamp_offset_if_items_are_removed() {
             f.render_stateful_widget(list, size, &mut state);
         })
         .unwrap();
-    terminal
-        .backend()
-        .buffer()
-        .assert_eq(&Buffer::with_lines(vec![
-            "   Item 2 ",
-            "   Item 3 ",
-            "   Item 4 ",
-            ">> Item 5 ",
-        ]));
+    terminal.backend().buffer().assert_eq(&Buffer::with_lines([
+        "   Item 2 ",
+        "   Item 3 ",
+        "   Item 4 ",
+        ">> Item 5 ",
+    ]));
 
     // render again with 1 items => check offset is clamped to 1
     state.select(Some(1));
@@ -178,15 +175,12 @@ fn widgets_list_should_clamp_offset_if_items_are_removed() {
             f.render_stateful_widget(list, size, &mut state);
         })
         .unwrap();
-    terminal
-        .backend()
-        .buffer()
-        .assert_eq(&Buffer::with_lines(vec![
-            "   Item 3 ",
-            "          ",
-            "          ",
-            "          ",
-        ]));
+    terminal.backend().buffer().assert_eq(&Buffer::with_lines([
+        "   Item 3 ",
+        "          ",
+        "          ",
+        "          ",
+    ]));
 }
 
 #[test]
@@ -209,7 +203,7 @@ fn widgets_list_should_display_multiline_items() {
             f.render_stateful_widget(list, size, &mut state);
         })
         .unwrap();
-    let mut expected = Buffer::with_lines(vec![
+    let mut expected = Buffer::with_lines([
         "   Item 1 ",
         "   Item 1a",
         ">> Item 2 ",
@@ -245,7 +239,7 @@ fn widgets_list_should_repeat_highlight_symbol() {
             f.render_stateful_widget(list, size, &mut state);
         })
         .unwrap();
-    let mut expected = Buffer::with_lines(vec![
+    let mut expected = Buffer::with_lines([
         "   Item 1 ",
         "   Item 1a",
         ">> Item 2 ",
@@ -283,7 +277,7 @@ fn widget_list_should_not_ignore_empty_string_items() {
     terminal
         .backend()
         .buffer()
-        .assert_eq(&Buffer::with_lines(vec!["Item 1", "", "", "Item 4"]));
+        .assert_eq(&Buffer::with_lines(["Item 1", "", "", "Item 4"]));
 }
 
 #[allow(clippy::too_many_lines)]
@@ -317,7 +311,7 @@ fn widgets_list_enable_always_highlight_spacing() {
     test_case(
         &mut state,
         HighlightSpacing::default(),
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│Item 1                      │",
             "│Item 1a                     │",
@@ -333,7 +327,7 @@ fn widgets_list_enable_always_highlight_spacing() {
     test_case(
         &mut state,
         HighlightSpacing::Always,
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│   Item 1                   │",
             "│   Item 1a                  │",
@@ -349,7 +343,7 @@ fn widgets_list_enable_always_highlight_spacing() {
     test_case(
         &mut state,
         HighlightSpacing::Never,
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│Item 1                      │",
             "│Item 1a                     │",
@@ -366,7 +360,7 @@ fn widgets_list_enable_always_highlight_spacing() {
     test_case(
         &mut state,
         HighlightSpacing::default(),
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│>> Item 1                   │",
             "│   Item 1a                  │",
@@ -383,7 +377,7 @@ fn widgets_list_enable_always_highlight_spacing() {
     test_case(
         &mut state,
         HighlightSpacing::Always,
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│>> Item 1                   │",
             "│   Item 1a                  │",
@@ -400,7 +394,7 @@ fn widgets_list_enable_always_highlight_spacing() {
     test_case(
         &mut state,
         HighlightSpacing::Never,
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│Item 1                      │",
             "│Item 1a                     │",

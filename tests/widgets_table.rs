@@ -44,7 +44,7 @@ fn widgets_table_column_spacing_can_be_changed() {
     // no space between columns
     test_case(
         0,
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│Head1Head2Head3             │",
             "│                            │",
@@ -61,7 +61,7 @@ fn widgets_table_column_spacing_can_be_changed() {
     // one space between columns
     test_case(
         1,
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│Head1 Head2 Head3           │",
             "│                            │",
@@ -78,7 +78,7 @@ fn widgets_table_column_spacing_can_be_changed() {
     // enough space to just not hide the third column
     test_case(
         6,
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│Head1      Head2      Head3 │",
             "│                            │",
@@ -95,7 +95,7 @@ fn widgets_table_column_spacing_can_be_changed() {
     // enough space to hide part of the third column
     test_case(
         7,
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│Head1       Head       Head3│",
             "│                            │",
@@ -143,7 +143,7 @@ fn widgets_table_columns_widths_can_use_fixed_length_constraints() {
             Constraint::Length(0),
             Constraint::Length(0),
         ],
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│                            │",
             "│                            │",
@@ -164,7 +164,7 @@ fn widgets_table_columns_widths_can_use_fixed_length_constraints() {
             Constraint::Length(1),
             Constraint::Length(1),
         ],
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│H H H                       │",
             "│                            │",
@@ -185,7 +185,7 @@ fn widgets_table_columns_widths_can_use_fixed_length_constraints() {
             Constraint::Length(8),
             Constraint::Length(8),
         ],
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│Head1    Head2    Head3     │",
             "│                            │",
@@ -234,7 +234,7 @@ fn widgets_table_columns_widths_can_use_percentage_constraints() {
             Constraint::Percentage(0),
             Constraint::Percentage(0),
         ],
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│                            │",
             "│                            │",
@@ -255,7 +255,7 @@ fn widgets_table_columns_widths_can_use_percentage_constraints() {
             Constraint::Percentage(11),
             Constraint::Percentage(11),
         ],
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│HeaHeaHea                   │",
             "│                            │",
@@ -276,7 +276,7 @@ fn widgets_table_columns_widths_can_use_percentage_constraints() {
             Constraint::Percentage(33),
             Constraint::Percentage(33),
         ],
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│Head1    Head2    Head3     │",
             "│                            │",
@@ -293,7 +293,7 @@ fn widgets_table_columns_widths_can_use_percentage_constraints() {
     // percentages summing to 100 should give equal widths
     test_case(
         &[Constraint::Percentage(50), Constraint::Percentage(50)],
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│Head1         Head2         │",
             "│                            │",
@@ -341,7 +341,7 @@ fn widgets_table_columns_widths_can_use_mixed_constraints() {
             Constraint::Length(0),
             Constraint::Percentage(0),
         ],
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│                            │",
             "│                            │",
@@ -362,7 +362,7 @@ fn widgets_table_columns_widths_can_use_mixed_constraints() {
             Constraint::Length(20),
             Constraint::Percentage(11),
         ],
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│Hea Head2                Hea│",
             "│                            │",
@@ -383,7 +383,7 @@ fn widgets_table_columns_widths_can_use_mixed_constraints() {
             Constraint::Length(10),
             Constraint::Percentage(33),
         ],
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│Head1     Head2      Head3  │",
             "│                            │",
@@ -404,7 +404,7 @@ fn widgets_table_columns_widths_can_use_mixed_constraints() {
             Constraint::Length(10),
             Constraint::Percentage(60),
         ],
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│Head1      Head2      Head3 │",
             "│                            │",
@@ -453,7 +453,7 @@ fn widgets_table_columns_widths_can_use_ratio_constraints() {
             Constraint::Ratio(0, 1),
             Constraint::Ratio(0, 1),
         ],
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│                            │",
             "│                            │",
@@ -474,7 +474,7 @@ fn widgets_table_columns_widths_can_use_ratio_constraints() {
             Constraint::Ratio(1, 9),
             Constraint::Ratio(1, 9),
         ],
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│HeaHeaHea                   │",
             "│                            │",
@@ -495,7 +495,7 @@ fn widgets_table_columns_widths_can_use_ratio_constraints() {
             Constraint::Ratio(1, 3),
             Constraint::Ratio(1, 3),
         ],
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│Head1    Head2     Head3    │",
             "│                            │",
@@ -512,7 +512,7 @@ fn widgets_table_columns_widths_can_use_ratio_constraints() {
     // percentages summing to 100 should give equal widths
     test_case(
         &[Constraint::Ratio(1, 2), Constraint::Ratio(1, 2)],
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│Head1         Head2         │",
             "│                            │",
@@ -563,7 +563,7 @@ fn widgets_table_can_have_rows_with_multi_lines() {
     // no selection
     test_case(
         &mut state,
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│Head1 Head2 Head3           │",
             "│                            │",
@@ -579,7 +579,7 @@ fn widgets_table_can_have_rows_with_multi_lines() {
     state.select(Some(0));
     test_case(
         &mut state,
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│   Head1 Head2 Head3        │",
             "│                            │",
@@ -595,7 +595,7 @@ fn widgets_table_can_have_rows_with_multi_lines() {
     state.select(Some(1));
     test_case(
         &mut state,
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│   Head1 Head2 Head3        │",
             "│                            │",
@@ -611,7 +611,7 @@ fn widgets_table_can_have_rows_with_multi_lines() {
     state.select(Some(3));
     test_case(
         &mut state,
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│   Head1 Head2 Head3        │",
             "│                            │",
@@ -665,7 +665,7 @@ fn widgets_table_enable_always_highlight_spacing() {
     test_case(
         &mut state,
         HighlightSpacing::default(),
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│Head1 Head2 Head3           │",
             "│                            │",
@@ -681,7 +681,7 @@ fn widgets_table_enable_always_highlight_spacing() {
     test_case(
         &mut state,
         HighlightSpacing::Always,
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│   Head1 Head2 Head3        │",
             "│                            │",
@@ -697,7 +697,7 @@ fn widgets_table_enable_always_highlight_spacing() {
     test_case(
         &mut state,
         HighlightSpacing::Never,
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│Head1 Head2 Head3           │",
             "│                            │",
@@ -714,7 +714,7 @@ fn widgets_table_enable_always_highlight_spacing() {
     test_case(
         &mut state,
         HighlightSpacing::default(),
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│   Head1 Head2 Head3        │",
             "│                            │",
@@ -731,7 +731,7 @@ fn widgets_table_enable_always_highlight_spacing() {
     test_case(
         &mut state,
         HighlightSpacing::Always,
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│   Head1 Head2 Head3        │",
             "│                            │",
@@ -748,7 +748,7 @@ fn widgets_table_enable_always_highlight_spacing() {
     test_case(
         &mut state,
         HighlightSpacing::Never,
-        &Buffer::with_lines(vec![
+        &Buffer::with_lines([
             "┌────────────────────────────┐",
             "│Head1 Head2 Head3           │",
             "│                            │",
@@ -800,7 +800,7 @@ fn widgets_table_can_have_elements_styled_individually() {
         })
         .unwrap();
 
-    let mut expected = Buffer::with_lines(vec![
+    let mut expected = Buffer::with_lines([
         "│   Head1  Head2  Head3      │",
         "│                            │",
         "│>> Row11  Row12  Row13      │",
@@ -862,15 +862,12 @@ fn widgets_table_should_render_even_if_empty() {
             f.render_widget(table, size);
         })
         .unwrap();
-    terminal
-        .backend()
-        .buffer()
-        .assert_eq(&Buffer::with_lines(vec![
-            "│Head1  Head2  Head3         │",
-            "│                            │",
-            "│                            │",
-            "│                            │",
-        ]));
+    terminal.backend().buffer().assert_eq(&Buffer::with_lines([
+        "│Head1  Head2  Head3         │",
+        "│                            │",
+        "│                            │",
+        "│                            │",
+    ]));
 }
 
 // based on https://github.com/fdehau/tui-rs/issues/470#issuecomment-852562848
@@ -938,19 +935,16 @@ fn widgets_table_should_clamp_offset_if_rows_are_removed() {
             f.render_stateful_widget(table, size, &mut state);
         })
         .unwrap();
-    terminal
-        .backend()
-        .buffer()
-        .assert_eq(&Buffer::with_lines(vec![
-            "┌────────────────────────────┐",
-            "│Head1 Head2 Head3           │",
-            "│                            │",
-            "│Row21 Row22 Row23           │",
-            "│Row31 Row32 Row33           │",
-            "│Row41 Row42 Row43           │",
-            "│Row51 Row52 Row53           │",
-            "└────────────────────────────┘",
-        ]));
+    terminal.backend().buffer().assert_eq(&Buffer::with_lines([
+        "┌────────────────────────────┐",
+        "│Head1 Head2 Head3           │",
+        "│                            │",
+        "│Row21 Row22 Row23           │",
+        "│Row31 Row32 Row33           │",
+        "│Row41 Row42 Row43           │",
+        "│Row51 Row52 Row53           │",
+        "└────────────────────────────┘",
+    ]));
 
     // render with 1 item => offset will be at 1
     state.select(Some(1));
@@ -971,17 +965,14 @@ fn widgets_table_should_clamp_offset_if_rows_are_removed() {
             f.render_stateful_widget(table, size, &mut state);
         })
         .unwrap();
-    terminal
-        .backend()
-        .buffer()
-        .assert_eq(&Buffer::with_lines(vec![
-            "┌────────────────────────────┐",
-            "│Head1 Head2 Head3           │",
-            "│                            │",
-            "│Row31 Row32 Row33           │",
-            "│                            │",
-            "│                            │",
-            "│                            │",
-            "└────────────────────────────┘",
-        ]));
+    terminal.backend().buffer().assert_eq(&Buffer::with_lines([
+        "┌────────────────────────────┐",
+        "│Head1 Head2 Head3           │",
+        "│                            │",
+        "│Row31 Row32 Row33           │",
+        "│                            │",
+        "│                            │",
+        "│                            │",
+        "└────────────────────────────┘",
+    ]));
 }

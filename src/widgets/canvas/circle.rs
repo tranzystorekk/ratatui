@@ -58,7 +58,7 @@ mod tests {
             .x_bounds([-10.0, 10.0])
             .y_bounds([-10.0, 10.0]);
         canvas.render(buffer.area, &mut buffer);
-        buffer.assert_eq(&Buffer::with_lines(vec![
+        buffer.assert_eq(&Buffer::with_lines([
             "     ⢀⣠⢤⣀ ",
             "    ⢰⠋  ⠈⣇",
             "    ⠘⣆⡀ ⣠⠇",

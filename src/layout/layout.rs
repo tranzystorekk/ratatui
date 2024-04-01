@@ -1360,7 +1360,7 @@ mod tests {
                 let s = c.to_string().repeat(area.width as usize);
                 Paragraph::new(s).render(layout[i], &mut buffer);
             }
-            buffer.assert_eq(&Buffer::with_lines(vec![expected]));
+            buffer.assert_eq(&Buffer::with_lines([expected]));
         }
 
         #[rstest]
