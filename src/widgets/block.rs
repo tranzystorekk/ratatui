@@ -1306,10 +1306,7 @@ mod tests {
                 .title("test".yellow())
                 .title_alignment(alignment)
                 .render(buffer.area, &mut buffer);
-
-            let mut expected_buffer = Buffer::with_lines(vec!["test"]);
-            expected_buffer.set_style(Rect::new(0, 0, 4, 1), Style::new().yellow());
-            buffer.assert_eq(&expected_buffer);
+            buffer.assert_eq(&Buffer::with_lines(vec!["test".yellow()]));
         }
     }
 
@@ -1322,10 +1319,7 @@ mod tests {
                 .title_style(Style::new().yellow())
                 .title_alignment(alignment)
                 .render(buffer.area, &mut buffer);
-
-            let mut expected_buffer = Buffer::with_lines(vec!["test"]);
-            expected_buffer.set_style(Rect::new(0, 0, 4, 1), Style::new().yellow());
-            buffer.assert_eq(&expected_buffer);
+            buffer.assert_eq(&Buffer::with_lines(vec!["test".yellow()]));
         }
     }
 
@@ -1338,10 +1332,7 @@ mod tests {
                 .title_style(Style::new().green().on_red())
                 .title_alignment(alignment)
                 .render(buffer.area, &mut buffer);
-
-            let mut expected_buffer = Buffer::with_lines(vec!["test"]);
-            expected_buffer.set_style(Rect::new(0, 0, 4, 1), Style::new().yellow().on_red());
-            buffer.assert_eq(&expected_buffer);
+            buffer.assert_eq(&Buffer::with_lines(vec!["test".yellow().on_red()]));
         }
     }
 

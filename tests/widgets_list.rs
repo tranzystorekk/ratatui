@@ -77,7 +77,6 @@ fn widgets_list_should_highlight_the_selected_item_wide_symbol() {
         .unwrap();
 
     let mut expected = Buffer::with_lines(vec!["   Item 1 ", "▶  Item 2 ", "   Item 3 "]);
-
     for x in 0..10 {
         expected.get_mut(x, 1).set_bg(Color::Yellow);
     }

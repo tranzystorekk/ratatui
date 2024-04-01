@@ -595,9 +595,10 @@ mod tests {
             let mut buf = Buffer::empty(Rect::new(0, 0, 10, 1));
             span.render(Rect::new(0, 0, 5, 1), &mut buf);
 
-            let mut expected = Buffer::with_lines(vec![Line::from("test      ")]);
-            expected.set_style(Rect::new(0, 0, 5, 1), (Color::Green, Color::Yellow));
-            buf.assert_eq(&expected);
+            buf.assert_eq(&Buffer::with_lines([Line::from(vec![
+                "test ".green().on_yellow(),
+                "     ".into(),
+            ])]));
         }
 
         /// When there is already a style set on the buffer, the style of the span should be
@@ -626,8 +627,7 @@ mod tests {
             // The existing code in buffer.set_line() handles multi-width graphemes by clearing the
             // cells of the hidden characters. This test ensures that the existing behavior is
             // preserved.
-            let expected = Buffer::with_lines(vec!["test 😃 content".green().on_yellow()]);
-            buf.assert_eq(&expected);
+            buf.assert_eq(&Buffer::with_lines(["test 😃 content".green().on_yellow()]));
         }
 
         /// When the span contains a multi-width grapheme that does not fit in the area passed to
