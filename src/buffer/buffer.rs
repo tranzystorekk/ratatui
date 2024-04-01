@@ -406,7 +406,10 @@ impl Buffer {
         );
         // shouldn't get here, but this guards against future behavior
         // that changes equality but not area or content
-        assert_eq!(self, expected, "buffers not equal");
+        assert_eq!(
+            self, expected,
+            "buffers are not equal in an unexpected way. Please open an issue about this."
+        );
     }
 }
 
