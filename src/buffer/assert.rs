@@ -5,28 +5,9 @@
 #[macro_export]
 macro_rules! assert_buffer_eq {
     ($actual_expr:expr, $expected_expr:expr) => {
-        let (actual, expected) = (&$actual_expr, &$expected_expr);
-        assert!(
-            actual.area == expected.area,
-            "buffer areas not equal\nexpected: {expected:?}\nactual:   {actual:?}",
-        );
-        let nice_diff = expected
-            .diff(actual)
-            .into_iter()
-            .enumerate()
-            .map(|(i, (x, y, cell))| {
-                let expected_cell = expected.get(x, y);
-                format!("{i}: at ({x}, {y})\n  expected: {expected_cell:?}\n  actual:   {cell:?}")
-            })
-            .collect::<Vec<String>>()
-            .join("\n");
-        assert!(
-            nice_diff.is_empty(),
-            "buffer contents not equal\nexpected: {expected:?}\nactual:   {actual:?}\ndiff:\n{nice_diff}",
-        );
-        // shouldn't get here, but this guards against future behavior
-        // that changes equality but not area or content
-        assert_eq!(actual, expected, "buffers not equal");
+        match (&$actual_expr, &$expected_expr) {
+            (actual, expected) => actual.assert_eq(expected),
+        }
     };
 }
 
