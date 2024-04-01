@@ -1,7 +1,4 @@
-use std::{
-    cmp::min,
-    fmt::{Debug, Formatter, Result},
-};
+use std::cmp::min;
 
 use unicode_segmentation::UnicodeSegmentation;
 use unicode_width::UnicodeWidthStr;
@@ -413,7 +410,7 @@ impl Buffer {
     }
 }
 
-impl Debug for Buffer {
+impl std::fmt::Debug for Buffer {
     /// Writes a debug representation of the buffer to the given formatter.
     ///
     /// The format is like a pretty printed struct, with the following fields:
@@ -421,7 +418,7 @@ impl Debug for Buffer {
     /// * `content`: displayed as a list of strings representing the content of the buffer
     /// * `styles`: displayed as a list of: `{ x: 1, y: 2, fg: Color::Red, bg: Color::Blue,
     ///   modifier: Modifier::BOLD }` only showing a value when there is a change in style.
-    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_fmt(format_args!(
             "Buffer {{\n    area: {:?},\n    content: [\n",
             &self.area
